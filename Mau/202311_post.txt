@@ -1,0 +1,4 @@
+Clicks	Source	Target
+2701	Click on Button for purchase membership	Interacting With Payment Page
+2619	Click on Button for purchase membership	Change Flow
+1099	Click on Button for purchase membership	No more actions

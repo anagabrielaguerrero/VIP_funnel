@@ -1,0 +1,35 @@
+Clicks	Source	Target
+1469	Interacting With Payment Page	Compra Exitosa
+1075	Change Flow	Click on Recargas y Servicios category
+886	Change Flow	Click on back arrow
+255	Interacting With Payment Page	Pago Fallido
+184	Interacting With Payment Page	Submitted card (Saved Card) payment form
+81	Interacting With Payment Page	Tu compra de membresÃ­a fallÃ³ Â¡FallÃ³ pago de servicio! error: Error: Recarga fallida ContÃ¡ctanos en care@undostres.com.mx
+65	Change Flow	Click on undefined category
+50	Change Flow	Click on Cine & Streaming category
+46	Change Flow	Click on vip Tab
+36	Change Flow	Click on Boletos de AutobÃºs category
+34	Change Flow	Click on Transporte y viaje category
+33	Change Flow	Click on Videojuegos category
+33	Interacting With Payment Page	Clicked Back
+24	Interacting With Payment Page	Selected payment method SPEI
+20	Change Flow	click on Banner VIP from Home.
+276	Interacting With Payment Page	No continuan
+13	Change Flow	Click on Gift Cards y MembresÃ­as category
+13	Change Flow	Click on mobile Tab
+6	Change Flow	Click on Entretenimiento category
+4	Interacting With Payment Page	Recarga Saldo de Unefon al nÃºmero 9614271049 Â¡Recarga Exitosa!
+3	Change Flow	Click on share referral code via WhatsApp button
+3	Change Flow	click on Banner from hamburguer menu.
+3	Interacting With Payment Page	Claim promocode bbva3x1
+2	Interacting With Payment Page	Focused: cine-stream-operator_amount field
+2	Change Flow	Click on giftcards Tab
+1	Change Flow	Click on tiny help icon
+1	Interacting With Payment Page	Clicked expiration year field
+1	Interacting With Payment Page	message shown: NÃºmero de cuenta incorrecto
+1	Interacting With Payment Page	Recarga TeleVÃ­a al No. OH***027 Â¡Recarga Exitosa!
+1	Interacting With Payment Page	Selected: service number, through: Service Number, value: 021206735
+1	Change Flow	Click on share referral code via Facebook button
+1	Change Flow	Click on Siguiente (with InstaPago on 5939) button
+1	Change Flow	Click on movie Tab
+1	Interacting With Payment Page	Cancelar suscripciÃ³n Flow

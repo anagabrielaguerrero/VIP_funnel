@@ -1,0 +1,30 @@
+Clicks	Source	Target
+658	Interacting With Payment Page	Compra Exitosa
+562	Change Flow	Click on back arrow
+453	Change Flow	Click on Recargas y Servicios category
+196	Interacting With Payment Page	Pago Fallido
+110	Interacting With Payment Page	Submitted card (New Card) payment form
+31	Change Flow	Click on undefined category
+26	Interacting With Payment Page	Compra Fallida
+22	Change Flow	Click on Cine & Streaming category
+20	Interacting With Payment Page	Â¡Felicidades! Ahora eres miembro VIP, disfruta los beneficios Â¡FallÃ³ el pago!
+16	Change Flow	Click on Transporte y viaje category
+15	Change Flow	Click on vip Tab
+15	Change Flow	Click on Boletos de AutobÃºs category
+10	Change Flow	Click on Videojuegos category
+10	Interacting With Payment Page	Clicked Back
+8	Change Flow	Click on mobile Tab
+8	Change Flow	click on Banner VIP from Home.
+5	Change Flow	Click on share referral code via WhatsApp button
+3	Change Flow	Click on Gift Cards y MembresÃ­as category
+143	Interacting With Payment Page	No continuan
+2	Interacting With Payment Page	Claim promocode 0001310000923792
+2	Change Flow	Click on Entretenimiento category
+2	Interacting With Payment Page	Recarga Saldo de Telcel al nÃºmero 8445971306 Â¡Recarga Exitosa!
+1	Interacting With Payment Page	Selected: celular-operator_amount, value: $100 (Recarga Saldo)
+1	Change Flow	Click on share referral code via Facebook button
+1	Interacting With Payment Page	clicked camera icon(OCR), OCR Field: postpagoNum, purpose: Movistar, deviceSource: not in app
+1	Interacting With Payment Page	User has selected 5stars
+1	Interacting With Payment Page	Paypal: Cancelled PayPal process
+1	Change Flow	click on Banner from hamburguer menu.
+1	Change Flow	Click on giftcards Tab

@@ -1,0 +1,37 @@
+Clicks	Source	Target
+1147	Change Flow	Click on Recargas y Servicios category
+1039	Change Flow	Click on back arrow
+442	Interacting With Payment Page	Pago Fallido
+190	Interacting With Payment Page	Submitted card (Saved Card) payment form
+98	Change Flow	Click on undefined category
+82	Change Flow	Click on Cine & Streaming category
+65	Change Flow	Click on vip Tab
+332	Interacting With Payment Page	No continuan
+57	Interacting With Payment Page	Compra Fallida
+1602	Interacting With Payment Page	Compra Exitosa
+37	Change Flow	Click on Transporte y viaje category
+34	Change Flow	Click on Videojuegos category
+33	Interacting With Payment Page	Selected payment method Efectivo
+28	Interacting With Payment Page	Clicked Back
+27	Change Flow	Click on Boletos de AutobÃºs category
+25	Change Flow	Click on Gift Cards y MembresÃ­as category
+18	Change Flow	click on Banner VIP from Home.
+13	Change Flow	Click on share referral code via WhatsApp button
+12	Change Flow	Click on mobile Tab
+7	Change Flow	Click on Entretenimiento category
+5	Change Flow	click on Banner from hamburguer menu.
+5	Interacting With Payment Page	Paypal: Cancelled PayPal process
+4	Interacting With Payment Page	Claim promocode quincena
+3	Change Flow	Click on giftcards Tab
+2	Change Flow	Click on movie Tab
+2	Change Flow	Click on telefono Tab
+2	Change Flow	Click on share referral code via Facebook button
+1	Interacting With Payment Page	1 Boleto  VIP Lun - Vie de CinÃ©polis Â¡Compra Exitosa!
+1	Interacting With Payment Page	Cancelar suscripciÃ³n Flow
+1	Interacting With Payment Page	Compra de tarjeta de regalo Xbox Â¡FallÃ³ el pago!
+1	Interacting With Payment Page	Focused: tag-operator field
+1	Interacting With Payment Page	Selected: cine-stream-operator_amount, value: CinÃ©polis
+1	Interacting With Payment Page	Unchecked (PayPal) &#34;Guardar esta cuenta para mis compras en futuro&#34; checkbox
+1	Interacting With Payment Page	Recarga Saldo de Telcel al nÃºmero 3414304470 Â¡Recarga Exitosa!
+1	Interacting With Payment Page	Focused: cine-stream-operator_amount_quantity field
+1	Change Flow	Click on bus_tickets Tab
