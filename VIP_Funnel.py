@@ -76,9 +76,8 @@ fig.update_layout(title_text=option, font_size=15, autosize=False, width=1500, h
 
 
 def highlight_low_values(val):
-    color = 'red' if val < 5 else 'white'
+    color = 'white' if val > 5 else '#AF1F00'
     return f'background-color: {color}'
-
 
 tab0, tab1, tab2, tab3 = st.tabs(['Funnel Subscriptions',"Acciones previas", "Cambio de flujo", "Acciones posteriores "])
 
