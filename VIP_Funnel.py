@@ -99,6 +99,19 @@ def highlight_low_values(val):
     color = '#AF1F00' if val < 4 else None 
     return f'background-color: {color}'
 
+def highlight_low_values1(val):
+    color = '#AF1F00' if val < 4 else None 
+    return f'background-color: {color}'
+
+def highlight_low_values2(val):
+    color = '#bd4d4d' if val < 4 else None 
+    return f'background-color: {color}'
+
+subset_index = otros_change.index.tolist()
+styled_df = post1.style.map(highlight_low_values1, subset=pd.IndexSlice[subset_index, '%'])
+subset_index = otros_int.index.tolist()
+styled_df = styled_df.map(highlight_low_values2, subset=pd.IndexSlice[subset_index, '%'])
+
 tab0, tab1, tab2, tab3 = st.tabs(['Funnel Subscriptions',"Acciones previas", "Cambio de flujo", "Acciones posteriores "])
 
 
@@ -121,5 +134,5 @@ with tab2:
 with tab3:
     st.header("Acciones posteriores")
     st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones en flujo" y a "Otras acciones en payment" (resaldados en rojo)')
-    st.table(post1.style.map(highlight_low_values,subset=['%']))
+    st.table(styled_df)
 
