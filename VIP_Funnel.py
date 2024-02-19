@@ -48,7 +48,6 @@ post.insert(1,'%',[round(x*100/post.Clicks.sum(),2) for x in list(post.Clicks) ]
 post1.insert(1,'%',[round(x*100/post1.Clicks.sum(),2) for x in list(post1.Clicks) ])
 
 
-
 unique_source_target = list(pd.unique(funnel[['Source', 'Target']].values.ravel('K')))
 mapping_dict = {k: v for v, k in enumerate(unique_source_target)}
 
@@ -75,6 +74,11 @@ fig = go.Figure(data=[go.Sankey(
 # Update layout
 fig.update_layout(title_text=option, font_size=15, autosize=False, width=1500, height=1000)
 
+
+def highlight_low_values(val):
+    color = 'red' if val < 5 else 'black'
+    return f'color: {color}'
+
 tab0, tab1, tab2, tab3 = st.tabs(['Funnel Subscriptions',"Acciones previas", "Cambio de flujo", "Acciones posteriores "])
 
 
@@ -84,7 +88,7 @@ with tab0:
 
 with tab1:
     st.header("Acciones previas")
-    st.table(prev)
+    st.table(prev.style.map(highlight_low_values,subset=['%']))
 
 
 with tab2:
