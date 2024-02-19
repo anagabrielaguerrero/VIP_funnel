@@ -42,6 +42,12 @@ new_row = pd.DataFrame.from_dict({'Clicks':[carousel.Clicks.sum()], 'Source':['C
 funnel = pd.concat([prev2,new_row,post,post1], ignore_index=True)
 colors =mcp.gen_color(cmap="viridis",n=len(funnel))
 funnel['Colors'] = colors
+#% en dataframe 
+prev.insert(1,'%',[round(x*100/prev.Clicks.sum(),2) for x in list(prev.Clicks) ])
+post.insert(1,'%',[round(x*100/post.Clicks.sum(),2) for x in list(post.Clicks) ])
+post1.insert(1,'%',[round(x*100/post1.Clicks.sum(),2) for x in list(post1.Clicks) ])
+
+
 
 unique_source_target = list(pd.unique(funnel[['Source', 'Target']].values.ravel('K')))
 mapping_dict = {k: v for v, k in enumerate(unique_source_target)}
