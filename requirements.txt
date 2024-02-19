@@ -6,4 +6,4 @@ mycolorpy
 numpy
 mysqlclient==2.2.1
 SQLAlchemy==2.0.25
-PyMySQL
+﻿mysql-connector-python==8.1.0
