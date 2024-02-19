@@ -7,10 +7,10 @@ import plotly.graph_objects as go
 from mycolorpy import colorlist as mcp
 import numpy as np
 import MySQLdb
-
+import pymysql
 
 url_object = URL.create(
-    "mysql",
+    "mysql+pymysql",
     username='gabriela_guerrero',
     password='aPTLPgXPhyLH',  # plain (unescaped) text
     host='bi.cpi0yoqzrjqz.us-west-1.rds.amazonaws.com',
