@@ -37,9 +37,9 @@ if option == 'Enero 2024':
 prev['Target'] = 'Click on Button for purchase membership' 
 prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
 carousel = prev[prev.apply(lambda row: row.astype(str).str.contains('Clicked carousel image').any(), axis=1)]
-prev = prev.drop(index=carousel.index)
+prev2 = prev.drop(index=carousel.index)
 new_row = pd.DataFrame.from_dict({'Clicks':[carousel.Clicks.sum()], 'Source':['Clicked carousel image'],'Target':['Click on Button for purchase membership']})
-funnel = pd.concat([prev,new_row,post,post1], ignore_index=True)
+funnel = pd.concat([prev2,new_row,post,post1], ignore_index=True)
 colors =mcp.gen_color(cmap="viridis",n=len(funnel))
 funnel['Colors'] = colors
 
