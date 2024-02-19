@@ -88,7 +88,7 @@ with tab0:
 
 with tab1:
     st.header("Acciones previas")
-    st.dataframe(prev.style.map(highlight_low_values,subset=['%']))
+    st.table(prev.style.map(highlight_low_values,subset=['%']))
 
 
 with tab2:
