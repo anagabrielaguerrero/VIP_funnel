@@ -17,7 +17,7 @@ import numpy as np
 # )
 
 
-conn = st.connection('mysql', type='sql')
+conn = st.experimental_connection('mysql', type='sql')
 
 # engine = create_engine(url_object)
 
@@ -34,7 +34,8 @@ WHERE
     AND sku_id IN (518, 1222)
 	group by extract(year_month from cancel_date), is_first_subscription,type;
 '''
-old_new = pd.read_sql(q,conn)
+old_new = conn.query(q)
+# old_new = pd.read_sql(q,conn)
 
 #exitosos
 q = '''
@@ -52,7 +53,9 @@ WHERE
     AND l.sku_id IN (518, 1222) AND l.cancel_reason  = 'canceled while user doing upgrade to year subscription'
 		and l.next_sku_id in (873,519) group by extract(year_month from cancel_date),is_first_subscription order by yearmo
 '''
-success = pd.read_sql(q,conn)
+success = conn.query(q)
+
+# success = pd.read_sql(q,conn)
 
 
 st.set_page_config(
