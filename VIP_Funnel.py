@@ -96,7 +96,7 @@ fig.update_layout(title_text=option, font_size=15, autosize=False, width=1500, h
 
 
 def highlight_low_values(val):
-    color = 'white' if val > 4 else '#AF1F00'
+    color = '#AF1F00' if val < 4 else None 
     return f'background-color: {color}'
 
 tab0, tab1, tab2, tab3 = st.tabs(['Funnel Subscriptions',"Acciones previas", "Cambio de flujo", "Acciones posteriores "])
@@ -108,14 +108,18 @@ with tab0:
 
 with tab1:
     st.header("Acciones previas")
+    st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones" (resaldados en rojo)')
+
     st.table(prev.style.map(highlight_low_values,subset=['%']))
 
 
 with tab2:
+    
     st.header("Cambio de flujo")
     st.table(post.style.map(highlight_low_values,subset=['%']))
 
 with tab3:
-    st.write("Acciones posteriores")
+    st.header("Acciones posteriores")
+    st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones en flujo" y a "Otras acciones en payment" (resaldados en rojo)')
     st.table(post1.style.map(highlight_low_values,subset=['%']))
 
