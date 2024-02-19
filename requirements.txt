@@ -6,3 +6,4 @@ mycolorpy
 numpy
 sqlalchemy
 mysql-python
+mysqlclient 
