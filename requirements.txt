@@ -5,3 +5,4 @@ plotly
 mycolorpy
 numpy
 sqlalchemy
+mysql-python
