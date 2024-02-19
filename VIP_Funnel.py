@@ -33,21 +33,41 @@ if option == 'Enero 2024':
     post = pd.read_csv('Mau/202401_post.txt',sep= '	')  
     post1 = pd.read_csv('Mau/202401_post1.txt', sep =  '	',index_col=False) 
 
-#Format
+#Format -----------
 prev['Target'] = 'Click on Button for purchase membership' 
 prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
 carousel = prev[prev.apply(lambda row: row.astype(str).str.contains('Clicked carousel image').any(), axis=1)]
 prev2 = prev.drop(index=carousel.index)
 new_row = pd.DataFrame.from_dict({'Clicks':[carousel.Clicks.sum()], 'Source':['Clicked carousel image'],'Target':['Click on Button for purchase membership']})
-funnel = pd.concat([prev2,new_row,post,post1], ignore_index=True)
-colors =mcp.gen_color(cmap="viridis",n=len(funnel))
-funnel['Colors'] = colors
+prev2 = pd.concat([prev2,new_row], ignore_index=True)
+
 #% en dataframe 
 prev.insert(1,'%',[round(x*100/prev.Clicks.sum(),2) for x in list(prev.Clicks) ])
 post.insert(1,'%',[round(x*100/post.Clicks.sum(),2) for x in list(post.Clicks) ])
 post1.insert(1,'%',[round(x*100/post1.Clicks.sum(),2) for x in list(post1.Clicks) ])
+prev2.insert(1,'%',[round(x*100/prev2.Clicks.sum(),2) for x in list(prev2.Clicks) ])
+
+#4% en otros
+otros_prev2 = prev2[prev2['%']<4]
+otros_post1 =  post1[post1['%']<4] 
+otros_int = otros_post1[otros_post1.Source == 'Interacting With Payment Page']
+otros_change = otros_post1[otros_post1.Source == 'Change Flow']
+
+new_prev2 = prev2.drop(index= otros_prev2.index)
+new_post1 =  post1.drop(index= otros_post1.index)
+new_row_prev2 = pd.DataFrame.from_dict({'Clicks':[otros_prev2.Clicks.sum()], 'Source':['Otras acciones'],'Target':['Click on Button for purchase membership']})
+new_row_post1_1 = pd.DataFrame.from_dict({'Clicks':[otros_int.Clicks.sum()], 'Source':['Interacting With Payment Page'],'Target':['Otras acciones en payment']})
+new_row_post1_2 = pd.DataFrame.from_dict({'Clicks':[otros_change.Clicks.sum()], 'Source':['Change Flow'],'Target':['Otras acciones en flujo']})
+new_prev2 = pd.concat([new_prev2,new_row_prev2], ignore_index=True)
+new_post1 = pd.concat([new_post1,new_row_post1_1,new_row_post1_2], ignore_index=True)
+
+funnel = pd.concat([new_prev2,post,new_post1], ignore_index=True)
+colors =mcp.gen_color(cmap="viridis",n=len(funnel))
+funnel['Colors'] = colors
 
 
+
+#Diagrama ---------------------------------------------------------
 unique_source_target = list(pd.unique(funnel[['Source', 'Target']].values.ravel('K')))
 mapping_dict = {k: v for v, k in enumerate(unique_source_target)}
 
