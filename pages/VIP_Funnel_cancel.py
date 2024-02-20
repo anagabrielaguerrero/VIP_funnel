@@ -9,16 +9,19 @@ import mysql.connector as MySQLdb
 import numpy as np
 import pymysql
 
-url_object = URL.create(
-    "mysql",
-    username='gabriela_guerrero',
-    password='aPTLPgXPhyLH',  # plain (unescaped) text
-    host='bi.cpi0yoqzrjqz.us-west-1.rds.amazonaws.com',
-    database='matrix',
-)
-engine = create_engine(url_object)
+# url_object = URL.create(
+#     "mysql",
+#     username='gabriela_guerrero',
+#     password='aPTLPgXPhyLH',  # plain (unescaped) text
+#     host='bi.cpi0yoqzrjqz.us-west-1.rds.amazonaws.com',
+#     database='matrix',
+# )
+# engine = create_engine(url_object)
 
-connection = engine.connect()
+# connection = engine.connect()
+
+conn = st.connection('mysql', type='sql')
+
 
 #old vs new
 q = '''
@@ -31,7 +34,9 @@ WHERE
     AND sku_id IN (518, 1222)
 	group by extract(year_month from cancel_date), is_first_subscription,type;
 '''
-old_new = pd.read_sql(q,connection)
+# old_new = pd.read_sql(q,connection)
+
+old_new = conn.query(q) 
 
 #exitosos
 q = '''
@@ -49,7 +54,8 @@ WHERE
     AND l.sku_id IN (518, 1222) AND l.cancel_reason  = 'canceled while user doing upgrade to year subscription'
 		and l.next_sku_id in (873,519) group by extract(year_month from cancel_date),is_first_subscription order by yearmo
 '''
-success = pd.read_sql(q,connection)
+# success = pd.read_sql(q,connection)
+success = conn.query(q) 
 
 
 st.set_page_config(
