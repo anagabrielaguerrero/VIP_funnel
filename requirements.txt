@@ -4,6 +4,6 @@ matplotlib
 plotly
 mycolorpy
 numpy
-SQLAlchemy==2.0.25
+SQLAlchemy
 mysqlclient
 
