@@ -4,8 +4,5 @@ matplotlib
 plotly
 mycolorpy
 numpy
-mysqlclient
 SQLAlchemy==2.0.25
 mysql-connector-python
-mysql-python
-pymysql
