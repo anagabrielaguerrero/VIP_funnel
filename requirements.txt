@@ -1,9 +1,3 @@
-pandas
-streamlit
-matplotlib
-plotly
-mycolorpy
-numpy
 SQLAlchemy
 mysqlclient
 
