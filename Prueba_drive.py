@@ -3,24 +3,38 @@ from pydrive2.drive import GoogleDrive
 import streamlit as st
 
 
+
+# Authenticate using the service account credentials
 gauth = GoogleAuth()
-gauth.LocalWebserverAuth() # Creates local webserver and auto handles authentication.
-drive = GoogleDrive(gauth) # Create GoogleDrive instance with authenticated GoogleAuth instance
+gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
+gauth.credentials = ServiceAccountCredentials.from_json_keyfile_name(st.secrets.credentials, ['https://www.googleapis.com/auth/drive'])
+gauth.Authorize()
 
-# ID of the folder containing the spreadsheet
-folder_id = '1CeVVklJOxqcOBu3qnOFeZuTTmrKkaAGF'
 
-# Create a new file inside the specified folder
-file_metadata = {
-    'title': 'Holamundo_streamlit.txt',  # Title of the file
-    'parents': [{'id': folder_id}]  # Specify the folder where the file will be created
+# Initialize GoogleDrive instance
+drive = GoogleDrive(gauth)
+
+# Define folder metadata
+folder_metadata = {
+    'title': 'Your New Folder',
+    'mimeType': 'application/vnd.google-apps.folder'
 }
 
-# Create the file
-new_file = drive.CreateFile(file_metadata)
-new_file.Upload()
+# Create the folder
+folder = drive.CreateFile(folder_metadata)
+folder.Upload()
 
-print(f"File '{new_file['title']}' created successfully in folder with ID '{folder_id}'")
+print(f"Folder '{folder['title']}' created successfully (ID: {folder['id']})")
 
+# Share the folder with specific email addresses
+emails_to_share = ['gabriela.guerrero@undostres.com.mx', 'ernesto.servin@undostres.com.mx']
 
-s
+for email in emails_to_share:
+    permission = {
+        'type': 'user',
+        'role': 'writer',  # Can be 'owner', 'writer', 'reader'
+        'value': email
+    }
+    folder.InsertPermission(permission)
+
+    print(f"Folder '{folder['title']}' shared with {email} successfully.")
