@@ -9,7 +9,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 # Authenticate using the service account credentials
 gauth = GoogleAuth()
 gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
-gauth.credentials = ServiceAccountCredentials.from_json(st.secrets['credentials'], ['https://www.googleapis.com/auth/drive'])
+gauth.credentials = ServiceAccountCredentials.from_json(st.secrets['credentials']) #, ['https://www.googleapis.com/auth/drive'])
 gauth.Authorize()
 
 
