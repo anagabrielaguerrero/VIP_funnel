@@ -18,6 +18,10 @@ gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_in
 gauth.Authorize()
 drive = GoogleDrive(gauth)
 
+# service_account_info = json.loads(service_info)
+my_credentials = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
+
+
 st.set_page_config(
     page_title="Subscriptions",
     page_icon="🟢",
@@ -27,9 +31,6 @@ st.set_page_config(
 st.title('VIP Funnel')
 
 st.sidebar.header("Subscriptions")
-
-
-
 
 
 option = st.selectbox(
@@ -56,7 +57,8 @@ if spreadsheets:
     ID = target_spreadsheet['id']
 
 #abrimos el spreadsheet con pygsheets 
-gc = pygsheets.authorize(service_file=service_info)
+gc = pygsheets.authorize(custom_credentials=my_credentials)
+# gc = pygsheets.authorize(service_file=service_info)
 sh = gc.open_by_key(ID)
 worksheet1 = sh.worksheet('title','prev')
 worksheet2 = sh.worksheet('title','post')
@@ -65,7 +67,6 @@ worksheet3 = sh.worksheet('title','post1')
 prev = worksheet1.get_as_df(has_header=True)
 post = worksheet2.get_as_df(has_header=True)
 post1 = worksheet3.get_as_df(has_header=True)
-
 
 
 
