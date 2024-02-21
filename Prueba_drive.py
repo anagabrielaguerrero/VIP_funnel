@@ -2,14 +2,14 @@ from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 import streamlit as st
 from oauth2client.service_account import ServiceAccountCredentials
-
-
+import json
 
 
 # Authenticate using the service account credentials
 gauth = GoogleAuth()
 gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
-gauth.credentials = ServiceAccountCredentials.from_json(st.secrets['credentials']) #, ['https://www.googleapis.com/auth/drive'])
+cred = st.secrets['credentials']
+gauth.credentials = ServiceAccountCredentials.from_json(json.loads(cred)) #, ['https://www.googleapis.com/auth/drive'])
 gauth.Authorize()
 
 
