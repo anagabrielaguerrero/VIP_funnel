@@ -21,7 +21,7 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 # client = gspread.authorize(creds)
 
 service_info = st.secrets['credentials']
-gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_name(service_info,scope)
+gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
 gauth.Authorize()
 
 
