@@ -14,8 +14,8 @@ gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccou
 #                                                  client_id=st.secrets.credentials.client_id, 
 #                                                  user_agent=None, 
 #                                                  token_uri=st.secrets.credentials.token_uri, revoke_uri='https://accounts.google.com/o/oauth2/revoke')
-service_info =json.dumps(st.secrets['credentials'])
-gauth.credentials  = ServiceAccountCredentials.from_json(json.loads(service_info))
+service_info =json.loads(st.secrets['credentials'])
+gauth.credentials  = ServiceAccountCredentials.from_json(json.dumps(service_info))
 gauth.Authorize()
 
 
