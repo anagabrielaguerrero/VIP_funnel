@@ -9,7 +9,7 @@ import json
 gauth = GoogleAuth()
 gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
 
-gauth.credentials = ServiceAccountCredentials(service_account_email = st.secrets.credentials.client_email, scopes='',
+gauth.credentials = ServiceAccountCredentials(service_account_email = st.secrets.credentials.client_email, signer= None,scopes='',
                                                private_key_id=st.secrets.credentials.private_key_id,
                                                  client_id=st.secrets.credentials.client_id, 
                                                  user_agent=None, 
