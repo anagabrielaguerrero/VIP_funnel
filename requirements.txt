@@ -1,7 +1,3 @@
-<<<<<<< HEAD
+
 pydrive2
 streamlit
-=======
-SQLAlchemy
-pymysql
->>>>>>> 2cb0d7888a1718ba1672ab781a767de29ba1075c
