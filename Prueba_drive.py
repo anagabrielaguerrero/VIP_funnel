@@ -9,12 +9,13 @@ import json
 gauth = GoogleAuth()
 gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
 
-gauth.credentials = ServiceAccountCredentials(service_account_email = st.secrets.credentials.client_email, signer= st.secrets.credentials.private_key,scopes='',
-                                               private_key_id=st.secrets.credentials.private_key_id,
-                                                 client_id=st.secrets.credentials.client_id, 
-                                                 user_agent=None, 
-                                                 token_uri=st.secrets.credentials.token_uri, revoke_uri='https://accounts.google.com/o/oauth2/revoke')
-# gauth.credentials = ServiceAccountCredentials.from_json(json.dumps(cred)) #, ['https://www.googleapis.com/auth/drive'])
+# gauth.credentials = ServiceAccountCredentials(service_account_email = st.secrets.credentials.client_email, signer= st.secrets.credentials.private_key,scopes='',
+#                                                private_key_id=st.secrets.credentials.private_key_id,
+#                                                  client_id=st.secrets.credentials.client_id, 
+#                                                  user_agent=None, 
+#                                                  token_uri=st.secrets.credentials.token_uri, revoke_uri='https://accounts.google.com/o/oauth2/revoke')
+service_info =st.secrets['credentials']
+gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_info)
 gauth.Authorize()
 
 
