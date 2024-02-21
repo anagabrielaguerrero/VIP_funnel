@@ -8,7 +8,7 @@ import json
 # Authenticate using the service account credentials
 gauth = GoogleAuth()
 gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
-cred = st.secrets['credentials']
+cred = json.load(st.secrets['credentials'])
 gauth.credentials = ServiceAccountCredentials.from_json(json.dumps(cred)) #, ['https://www.googleapis.com/auth/drive'])
 gauth.Authorize()
 
