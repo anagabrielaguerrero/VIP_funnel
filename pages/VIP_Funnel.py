@@ -9,7 +9,6 @@ from pydrive2.drive import GoogleDrive
 from oauth2client.service_account import ServiceAccountCredentials
 import pygsheets
 
-
 # Authenticate using the service account credentials
 gauth = GoogleAuth()
 gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
@@ -57,7 +56,7 @@ if spreadsheets:
     ID = target_spreadsheet['id']
 
 #abrimos el spreadsheet con pygsheets 
-gc = pygsheets.authorize(service_file='theta-actor-415016-cb72513aed67.json')
+gc = pygsheets.authorize(service_file=service_info)
 sh = gc.open_by_key(ID)
 worksheet1 = sh.worksheet('title','prev')
 worksheet2 = sh.worksheet('title','post')
