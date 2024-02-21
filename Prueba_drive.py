@@ -14,8 +14,14 @@ gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccou
 #                                                  client_id=st.secrets.credentials.client_id, 
 #                                                  user_agent=None, 
 #                                                  token_uri=st.secrets.credentials.token_uri, revoke_uri='https://accounts.google.com/o/oauth2/revoke')
-service_info =json.loads(st.secrets['credentials'])
-gauth.credentials  = ServiceAccountCredentials.from_json(json.dumps(service_info))
+
+# Set up the credentials
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+# creds = ServiceAccountCredentials.from_json_keyfile_name('PATH_TO_JSON.json', scope)
+# client = gspread.authorize(creds)
+
+service_info = st.secrets['credentials']
+gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_name(service_info,scope)
 gauth.Authorize()
 
 
