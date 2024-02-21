@@ -4,13 +4,26 @@ import plotly.graph_objects as go
 from mycolorpy import colorlist as mcp
 import numpy as np
 
+from pydrive2.auth import GoogleAuth
+from pydrive2.drive import GoogleDrive
+from oauth2client.service_account import ServiceAccountCredentials
+import pygsheets
+
+
+# Authenticate using the service account credentials
+gauth = GoogleAuth()
+gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+service_info = st.secrets['credentials']
+gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
+gauth.Authorize()
+drive = GoogleDrive(gauth)
 
 st.set_page_config(
     page_title="Subscriptions",
     page_icon="🟢",
     layout="wide"
 )
-
 
 st.title('VIP Funnel')
 
@@ -24,21 +37,38 @@ option = st.selectbox(
     'Mes',
     ('Octubre 2023','Noviembre 2023','Diciembre 2023', 'Enero 2024'))
 if option == 'Octubre 2023':
-    prev = pd.read_csv('Fil/logs_202310_prev.csv')
-    post = pd.read_csv('Mau/202310_post.txt',sep= '	')  
-    post1 = pd.read_csv('Mau/202310_post1.txt', sep =  '	',index_col=False) 
+    spreadsheet_name = '202310'
+    # prev = pd.read_csv('Fil/logs_202310_prev.csv')
+    # post = pd.read_csv('Mau/202310_post.txt',sep= '	')  
+    # post1 = pd.read_csv('Mau/202310_post1.txt', sep =  '	',index_col=False) 
 elif option == 'Noviembre 2023':
-    prev = pd.read_csv('Fil/logs_202311_prev.csv')
-    post = pd.read_csv('Mau/202311_post.txt',sep= '	')  
-    post1 = pd.read_csv('Mau/202311_post1.txt', sep =  '	',index_col=False) 
+    spreadsheet_name = '202311'
 if option == 'Diciembre 2023':
-    prev = pd.read_csv('Fil/logs_202312_prev.csv')
-    post = pd.read_csv('Mau/202312_post.txt',sep= '	')  
-    post1 = pd.read_csv('Mau/202312_post1.txt', sep =  '	',index_col=False) 
+    spreadsheet_name = '202312'
 if option == 'Enero 2024':
-    prev = pd.read_csv('Fil/logs_202401_prev.csv')
-    post = pd.read_csv('Mau/202401_post.txt',sep= '	')  
-    post1 = pd.read_csv('Mau/202401_post1.txt', sep =  '	',index_col=False) 
+    spreadsheet_name = '202401'
+
+#Extraemos los los ID de los sheets según el que se pida 
+spreadsheet_query = f"title='{spreadsheet_name}' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false"
+spreadsheets = drive.ListFile({'q': spreadsheet_query}).GetList()
+if spreadsheets:
+    target_spreadsheet = spreadsheets[0]
+    print(f"Found Spreadsheet: {target_spreadsheet['title']} (ID: {target_spreadsheet['id']})")
+    ID = target_spreadsheet['id']
+
+#abrimos el spreadsheet con pygsheets 
+gc = pygsheets.authorize(service_file='theta-actor-415016-cb72513aed67.json')
+sh = gc.open_by_key(ID)
+worksheet1 = sh.worksheet('title','prev')
+worksheet2 = sh.worksheet('title','post')
+worksheet3 = sh.worksheet('title','post1')
+
+prev = worksheet1.get_as_df(has_header=True)
+post = worksheet2.get_as_df(has_header=True)
+post1 = worksheet3.get_as_df(has_header=True)
+
+
+
 
 #Format -----------
 prev['Target'] = 'Click on Button for purchase membership' 
