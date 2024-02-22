@@ -19,9 +19,6 @@ gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_in
 gauth.Authorize()
 drive = GoogleDrive(gauth)
 
-service_account_info = json.loads(service_info)
-my_credentials = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info,scope)
-
 
 st.set_page_config(
     page_title="Subscriptions",
@@ -58,7 +55,7 @@ if spreadsheets:
     ID = target_spreadsheet['id']
 
 #abrimos el spreadsheet con pygsheets 
-gc = pygsheets.authorize(custom_credentials=my_credentials)
+gc = pygsheets.authorize(service_info)
 # gc = pygsheets.authorize(service_file=service_info)
 sh = gc.open_by_key(ID)
 worksheet1 = sh.worksheet('title','prev')
