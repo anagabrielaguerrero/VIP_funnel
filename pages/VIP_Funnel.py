@@ -6,13 +6,11 @@ import numpy as np
 from gspread_pandas import Spread,Client
 
 
-# import json, attrdict
 
 
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 from oauth2client.service_account import ServiceAccountCredentials
-import pygsheets
 
 # Authenticate using the service account credentials
 gauth = GoogleAuth()
@@ -51,12 +49,12 @@ if option == 'Enero 2024':
     spreadsheet_name = '202401'
 
 #Extraemos los los ID de los sheets según el que se pida 
-spreadsheet_query = f"title='{spreadsheet_name}' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false"
-spreadsheets = drive.ListFile({'q': spreadsheet_query}).GetList()
-if spreadsheets:
-    target_spreadsheet = spreadsheets[0]
-    print(f"Found Spreadsheet: {target_spreadsheet['title']} (ID: {target_spreadsheet['id']})")
-    ID = target_spreadsheet['id']
+# spreadsheet_query = f"title='{spreadsheet_name}' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false"
+# spreadsheets = drive.ListFile({'q': spreadsheet_query}).GetList()
+# if spreadsheets:
+#     target_spreadsheet = spreadsheets[0]
+#     print(f"Found Spreadsheet: {target_spreadsheet['title']} (ID: {target_spreadsheet['id']})")
+#     ID = target_spreadsheet['id']
 
 from google.oauth2 import service_account
 #abrimos el spreadsheet con pygsheets 
@@ -86,19 +84,6 @@ def load_the_spreadsheet(spreadsheetname):
 prev = load_the_spreadsheet('prev')
 post = load_the_spreadsheet('post')
 post1 = load_the_spreadsheet('post1')
-
-
-# gc = pygsheets.authorize(custom_credentials= my_credentials)
-# gc = pygsheets.authorize(service_file=service_info)
-# sh = gc.open_by_key(ID)
-# worksheet1 = sh.worksheet('title','prev')
-# worksheet2 = sh.worksheet('title','post')
-# worksheet3 = sh.worksheet('title','post1')
-
-# prev = worksheet1.get_as_df(has_header=True)
-# post = worksheet2.get_as_df(has_header=True)
-# post1 = worksheet3.get_as_df(has_header=True)
-
 
 
 #Format -----------

@@ -7,7 +7,7 @@ import numpy as np
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 from oauth2client.service_account import ServiceAccountCredentials
-import pygsheets
+from gspread_pandas import Spread,Client
 
 
 
@@ -20,22 +20,50 @@ gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_in
 gauth.Authorize()
 drive = GoogleDrive(gauth)
 spreadsheet_name = 'Cancelations'
-spreadsheet_query = f"title='{spreadsheet_name}' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false"
+# spreadsheet_query = f"title='{spreadsheet_name}' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false"
 
-spreadsheets = drive.ListFile({'q': spreadsheet_query}).GetList()
-if spreadsheets:
-    target_spreadsheet = spreadsheets[0]
-    print(f"Found Spreadsheet: {target_spreadsheet['title']} (ID: {target_spreadsheet['id']})")
-    ID = target_spreadsheet['id']
+# spreadsheets = drive.ListFile({'q': spreadsheet_query}).GetList()
+# if spreadsheets:
+#     target_spreadsheet = spreadsheets[0]
+#     print(f"Found Spreadsheet: {target_spreadsheet['title']} (ID: {target_spreadsheet['id']})")
+#     ID = target_spreadsheet['id']
 
-#abrimos el spreadsheet con pygsheets 
-gc = pygsheets.authorize(service_file='theta-actor-415016-cb72513aed67.json')
-sh = gc.open_by_key(ID)
-worksheet1 = sh.worksheet('title','old_new')
-worksheet2 = sh.worksheet('title','upgrades')
 
-old_new = worksheet1.get_as_df(has_header=True)
-success = worksheet2.get_as_df(has_header=True)
+from google.oauth2 import service_account
+#abrimos el spreadsheet 
+credentials = service_account.Credentials.from_service_account_info(service_info, scopes = scope)
+client = Client(scope=scope,creds=credentials)
+spread = Spread(spreadsheet_name,client = client)
+
+st.write(spread.url)
+sh = client.open(spreadsheet_name)
+worksheet_list = sh.worksheets()
+
+# Functions 
+@st.cache()
+# Get our worksheet names
+def worksheet_names():
+    sheet_names = []   
+    for sheet in worksheet_list:
+        sheet_names.append(sheet.title)  
+    return sheet_names
+
+# Get the sheet as dataframe
+def load_the_spreadsheet(spreadsheetname):
+    worksheet = sh.worksheet(spreadsheetname)
+    df = pd.DataFrame(worksheet.get_all_records())
+    return df
+
+old_new = load_the_spreadsheet('old_new')
+success = load_the_spreadsheet('upgrades')
+    
+# gc = pygsheets.authorize(service_file='theta-actor-415016-cb72513aed67.json')
+# sh = gc.open_by_key(ID)
+# worksheet1 = sh.worksheet('title','old_new')
+# worksheet2 = sh.worksheet('title','upgrades')
+
+# old_new = worksheet1.get_as_df(has_header=True)
+# success = worksheet2.get_as_df(has_header=True)
 
 
 st.set_page_config(
