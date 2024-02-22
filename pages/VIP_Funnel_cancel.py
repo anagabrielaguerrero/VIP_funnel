@@ -54,7 +54,7 @@ def load_the_spreadsheet(spreadsheetname):
     df = pd.DataFrame(worksheet.get_all_records())
     return df
 
-old_new = load_the_spreadsheet('old_new')
+old_new = load_the_spreadsheet('new_old')
 success = load_the_spreadsheet('upgrades')
     
 # gc = pygsheets.authorize(service_file='theta-actor-415016-cb72513aed67.json')
