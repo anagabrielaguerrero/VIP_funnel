@@ -79,8 +79,8 @@ st.sidebar.header("Cancellations")
 #format 
 old = old_new[old_new['is_first_subscription']==0]   #ord(b'\x00' 
 new = old_new[old_new['is_first_subscription']==1] 
-old_m = old.groupby('yearmo').agg({'total': 'sum'})  # todos por mes 
-new_m = new.groupby('yearmo').agg({'total': 'sum'})
+old_m = old.groupby('yearmo').agg({'Cantidad': 'sum'})  # todos por mes 
+new_m = new.groupby('yearmo').agg({'Cantidad': 'sum'})
 old_success = success[success['is_first_subscription']==0]  
 new_success = success[success['is_first_subscription']== 1] 
 old['Source'] = 'Old' #añadiendo nodos 
@@ -107,13 +107,13 @@ if option == 'Diciembre 2023':
 if option == 'Enero 2024':
     yearmo = 202401
 
-funnel = pd.DataFrame.from_dict({'Source':['Total Manual','Total Manual'], 'Target': ['Old','New'], 'Value': [old_m.loc[yearmo, 'total'],new_m.loc[yearmo, 'total']]})
-flux_old = pd.DataFrame({'Source':list(old[old['yearmo'] == yearmo]['Source']), 'Target':list(old[old['yearmo'] == yearmo]['type']), 'Value':list(old[old['yearmo'] == yearmo]['total'])})
-flux_new = pd.DataFrame({'Source':list(new[new['yearmo'] == yearmo]['Source']), 'Target':list(new[new['yearmo'] == yearmo]['type']), 'Value':list(new[new['yearmo'] == yearmo]['total'])})
-flux_old_success = pd.DataFrame({'Source':list(old_success[old_success['yearmo'] == yearmo]['Source']), 'Target':['Successful '], 'Value':list(old_success[old_success['yearmo'] == yearmo]['count(*)'])})
-flux_new_success = pd.DataFrame({'Source':list(new_success[new_success['yearmo'] == yearmo]['Source']), 'Target':['Successful '], 'Value':list(new_success[new_success['yearmo'] == yearmo]['count(*)'])})
-flux_new_fail = pd.DataFrame({'Source':'Upgrade Attempt New', 'Target': 'Failed upgrade', 'Value':[flux_new[flux_new['Target'] == 'Upgrade Attempt New']['Value'].values[0]-new_success[new_success['yearmo'] == yearmo]['count(*)'].values[0]]}) 
-flux_old_fail = pd.DataFrame({'Source':'Upgrade Attempt Old', 'Target': 'Failed upgrade', 'Value': [flux_old[flux_old['Target'] == 'Upgrade Attempt Old']['Value'].values[0]- old_success[old_success['yearmo'] == yearmo]['count(*)'].values[0]]})
+funnel = pd.DataFrame.from_dict({'Source':['Cantidad Manual','Cantidad Manual'], 'Target': ['Old','New'], 'Value': [old_m.loc[yearmo, 'Cantidad'],new_m.loc[yearmo, 'Cantidad']]})
+flux_old = pd.DataFrame({'Source':list(old[old['yearmo'] == yearmo]['Source']), 'Target':list(old[old['yearmo'] == yearmo]['type']), 'Value':list(old[old['yearmo'] == yearmo]['Cantidad'])})
+flux_new = pd.DataFrame({'Source':list(new[new['yearmo'] == yearmo]['Source']), 'Target':list(new[new['yearmo'] == yearmo]['type']), 'Value':list(new[new['yearmo'] == yearmo]['Cantidad'])})
+flux_old_success = pd.DataFrame({'Source':list(old_success[old_success['yearmo'] == yearmo]['Source']), 'Target':['Successful '], 'Value':list(old_success[old_success['yearmo'] == yearmo]['Cantidad'])})
+flux_new_success = pd.DataFrame({'Source':list(new_success[new_success['yearmo'] == yearmo]['Source']), 'Target':['Successful '], 'Value':list(new_success[new_success['yearmo'] == yearmo]['Cantidad'])})
+flux_new_fail = pd.DataFrame({'Source':'Upgrade Attempt New', 'Target': 'Failed upgrade', 'Value':[flux_new[flux_new['Target'] == 'Upgrade Attempt New']['Value'].values[0]-new_success[new_success['yearmo'] == yearmo]['Cantidad'].values[0]]}) 
+flux_old_fail = pd.DataFrame({'Source':'Upgrade Attempt Old', 'Target': 'Failed upgrade', 'Value': [flux_old[flux_old['Target'] == 'Upgrade Attempt Old']['Value'].values[0]- old_success[old_success['yearmo'] == yearmo]['Cantidad'].values[0]]})
 
 funnel = pd.concat([funnel,flux_old,flux_new,flux_old_success,flux_new_success,flux_old_fail,flux_new_fail], ignore_index=True)
 colors =mcp.gen_color(cmap="viridis",n=len(funnel))
