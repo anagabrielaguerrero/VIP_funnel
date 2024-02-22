@@ -65,19 +65,39 @@ client = Client(scope=scope,creds=credentials)
 spread = Spread(spreadsheet_name,client = client)
 
 st.write(spread.url)
+sh = client.open(spreadsheet_name)
+worksheet_list = sh.worksheets()
 
+# Functions 
+@st.cache()
+# Get our worksheet names
+def worksheet_names():
+    sheet_names = []   
+    for sheet in worksheet_list:
+        sheet_names.append(sheet.title)  
+    return sheet_names
+
+# Get the sheet as dataframe
+def load_the_spreadsheet(spreadsheetname):
+    worksheet = sh.worksheet(spreadsheetname)
+    df = pd.DataFrame(worksheet.get_all_records())
+    return df
+
+prev = load_the_spreadsheet('prev')
+post = load_the_spreadsheet('post')
+post1 = load_the_spreadsheet('post1')
 
 
 # gc = pygsheets.authorize(custom_credentials= my_credentials)
 # gc = pygsheets.authorize(service_file=service_info)
-sh = gc.open_by_key(ID)
-worksheet1 = sh.worksheet('title','prev')
-worksheet2 = sh.worksheet('title','post')
-worksheet3 = sh.worksheet('title','post1')
+# sh = gc.open_by_key(ID)
+# worksheet1 = sh.worksheet('title','prev')
+# worksheet2 = sh.worksheet('title','post')
+# worksheet3 = sh.worksheet('title','post1')
 
-prev = worksheet1.get_as_df(has_header=True)
-post = worksheet2.get_as_df(has_header=True)
-post1 = worksheet3.get_as_df(has_header=True)
+# prev = worksheet1.get_as_df(has_header=True)
+# post = worksheet2.get_as_df(has_header=True)
+# post1 = worksheet3.get_as_df(has_header=True)
 
 
 
