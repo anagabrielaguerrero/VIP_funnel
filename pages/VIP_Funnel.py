@@ -3,7 +3,9 @@ import streamlit as st
 import plotly.graph_objects as go
 from mycolorpy import colorlist as mcp
 import numpy as np
-import json, attrdict
+# from streamlit_gsheets import GSheetsConnection
+
+# import json, attrdict
 
 
 from pydrive2.auth import GoogleAuth
@@ -17,6 +19,7 @@ gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccou
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
 service_info = st.secrets['credentials']
 gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
+my_credentials = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
 gauth.Authorize()
 drive = GoogleDrive(gauth)
 
@@ -57,30 +60,8 @@ if spreadsheets:
 
 #abrimos el spreadsheet con pygsheets 
 
-def as_attrdict(val):
-    if not isinstance(val, AttrDict):
-        raise TypeError('not AttrDict')
-    return AttrDictForJson(val)
 
-
-class AttrDictForJson(dict):
-
-    def __init__(self, attrdict):
-        super().__init__()
-        self.items = attrdict.items
-        self._len = attrdict.__len__
-        # key creation necessary for json.dump to work with CPython 
-        # This is because optimised json bypasses __len__ on CPython
-        if self._len() != 0:
-            self[None] = None
-
-    def __len__(self):
-        return self._len()
-    
-json_string = json.dumps(service_info, default=as_attrdict)
-
-
-gc = pygsheets.authorize(service_account_env_var = json_string)
+gc = pygsheets.authorize(custom_credentials= my_credentials)
 # gc = pygsheets.authorize(service_file=service_info)
 sh = gc.open_by_key(ID)
 worksheet1 = sh.worksheet('title','prev')
