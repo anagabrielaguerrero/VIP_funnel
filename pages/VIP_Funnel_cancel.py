@@ -35,7 +35,7 @@ credentials = service_account.Credentials.from_service_account_info(service_info
 client = Client(scope=scope,creds=credentials)
 spread = Spread(spreadsheet_name,client = client)
 
-st.write(spread.url)
+# st.write(spread.url)
 sh = client.open(spreadsheet_name)
 worksheet_list = sh.worksheets()
 
