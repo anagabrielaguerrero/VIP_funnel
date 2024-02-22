@@ -55,7 +55,8 @@ if spreadsheets:
     ID = target_spreadsheet['id']
 
 #abrimos el spreadsheet con pygsheets 
-gc = pygsheets.authorize(service_account_env_var = service_info)
+    
+gc = pygsheets.authorize(service_account_env_var = json.dumps(service_info))
 # gc = pygsheets.authorize(service_file=service_info)
 sh = gc.open_by_key(ID)
 worksheet1 = sh.worksheet('title','prev')
