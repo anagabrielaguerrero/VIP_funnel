@@ -186,8 +186,9 @@ def select_col1(x):
     df2 =  pd.DataFrame(c2, index=x3.index, columns=x3.columns)
     df2.loc[mask3, 'Source'] = c3
     #modify values of df1 column by boolean mask
-    df1.merge(df2)
-    return df1
+    df = pd.concat([df1,df2])
+    # df1.merge(df2)
+    return df
 
 
 
@@ -210,17 +211,17 @@ with tab1:
     st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones" (resaldados en naranja)')
     prev= prev.reindex(['Source', 'Target', 'Clicks','%'], axis=1)
     # st.table(prev.style.map(highlight_low_values,subset=['%']).format( precision=1))
-    st.table(prev.style.apply(select_col, axis=None).format( precision=1))
+    st.table(prev.style.apply(select_col, axis=None).format( precision=2))
 
 
 
 with tab2:
     post= post.reindex(['Source', 'Target', 'Clicks','%'], axis=1)
     st.header("Cambio de flujo")
-    st.table(post.style.apply(select_col, axis=None).format( precision=1))
+    st.table(post.style.apply(select_col1, axis=None).format( precision=2))
 
 with tab3:
     st.header("Acciones posteriores")
     st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones en flujo" (resaltados en naranja) y a "Otras acciones en payment" (resaldados en morado)')
-    st.table(styled_df.format( precision=1))
+    st.table(styled_df.format( precision=2))
 
