@@ -8,4 +8,4 @@ oauth2client
 pygsheets
 attrdict
 streamlit_gsheets
-gspread
+gspread_pandas
