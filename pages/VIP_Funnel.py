@@ -3,7 +3,8 @@ import streamlit as st
 import plotly.graph_objects as go
 from mycolorpy import colorlist as mcp
 import numpy as np
-# from streamlit_gsheets import GSheetsConnection
+from gspread_pandas import Spread,Client
+
 
 # import json, attrdict
 
@@ -19,7 +20,6 @@ gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccou
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
 service_info = st.secrets['credentials']
 gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
-my_credentials = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
 gauth.Authorize()
 drive = GoogleDrive(gauth)
 
@@ -58,10 +58,17 @@ if spreadsheets:
     print(f"Found Spreadsheet: {target_spreadsheet['title']} (ID: {target_spreadsheet['id']})")
     ID = target_spreadsheet['id']
 
+from google.oauth2 import service_account
 #abrimos el spreadsheet con pygsheets 
+credentials = service_account.Credentials.from_service_account_info(service_info, scopes = scope)
+client = Client(scope=scope,creds=credentials)
+spread = Spread(spreadsheet_name,client = client)
+
+st.write(spread.url)
 
 
-gc = pygsheets.authorize(custom_credentials= my_credentials)
+
+# gc = pygsheets.authorize(custom_credentials= my_credentials)
 # gc = pygsheets.authorize(service_file=service_info)
 sh = gc.open_by_key(ID)
 worksheet1 = sh.worksheet('title','prev')
