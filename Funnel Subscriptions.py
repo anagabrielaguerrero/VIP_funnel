@@ -218,7 +218,7 @@ with tab1:
 with tab2:
     post= post.reindex(['Source', 'Target', 'Clicks','%'], axis=1)
     st.header("Cambio de flujo")
-    st.table(post.style.apply(select_col, axis=None).format( precision=2))
+    st.table(post.style.apply(select_col1, axis=None).format( precision=2))
 
 with tab3:
     st.header("Acciones posteriores")
