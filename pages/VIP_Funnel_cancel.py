@@ -10,8 +10,18 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pygsheets
 
 
+
+# Authenticate using the service account credentials
+gauth = GoogleAuth()
+gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+service_info = st.secrets['credentials']
+gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
+gauth.Authorize()
+drive = GoogleDrive(gauth)
 spreadsheet_name = 'Cancelations'
 spreadsheet_query = f"title='{spreadsheet_name}' and mimeType='application/vnd.google-apps.spreadsheet' and trashed=false"
+
 spreadsheets = drive.ListFile({'q': spreadsheet_query}).GetList()
 if spreadsheets:
     target_spreadsheet = spreadsheets[0]
