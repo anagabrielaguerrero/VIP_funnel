@@ -143,7 +143,7 @@ fig = go.Figure(data=[go.Sankey(
 )],)
 
 # Update layout
-fig.update_layout(title_text="Enero 2024", font_size=15, autosize=False, width=1500, height=1000)
+fig.update_layout(title_text=option, font_size=15, autosize=False, width=1500, height=1000)
 
 tab0, tab1 = st.tabs(['Funnel Cancellations',"True cancel reasons"])
 
