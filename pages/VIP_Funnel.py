@@ -55,8 +55,31 @@ if spreadsheets:
     ID = target_spreadsheet['id']
 
 #abrimos el spreadsheet con pygsheets 
+
+def as_attrdict(val):
+    if not isinstance(val, AttrDict):
+        raise TypeError('not AttrDict')
+    return AttrDictForJson(val)
+
+
+class AttrDictForJson(dict):
+
+    def __init__(self, attrdict):
+        super().__init__()
+        self.items = attrdict.items
+        self._len = attrdict.__len__
+        # key creation necessary for json.dump to work with CPython 
+        # This is because optimised json bypasses __len__ on CPython
+        if self._len() != 0:
+            self[None] = None
+
+    def __len__(self):
+        return self._len()
     
-gc = pygsheets.authorize(service_account_env_var = json.dumps(service_info))
+json_string = json.dumps(service_info, default=as_attrdict)
+
+
+gc = pygsheets.authorize(service_account_env_var = json_string)
 # gc = pygsheets.authorize(service_file=service_info)
 sh = gc.open_by_key(ID)
 worksheet1 = sh.worksheet('title','prev')
