@@ -3,6 +3,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from mycolorpy import colorlist as mcp
 import numpy as np
+import json
 
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
@@ -18,8 +19,8 @@ gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_in
 gauth.Authorize()
 drive = GoogleDrive(gauth)
 
-# service_account_info = json.loads(service_info)
-my_credentials = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
+service_account_info = json.loads(service_info)
+my_credentials = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info,scope)
 
 
 st.set_page_config(
