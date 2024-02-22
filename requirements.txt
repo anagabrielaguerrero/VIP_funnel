@@ -6,3 +6,4 @@ pydrive2
 streamlit
 oauth2client
 pygsheets
+attrdict
