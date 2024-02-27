@@ -294,7 +294,8 @@ def format_nan(val):
     else: 
         return '{:.2%}'.format(val) 
 
-cm = sns.light_palette("coolwarm", as_cmap=True)
+# cm = sns.light_palette("green", as_cmap=True)
+cm = sns.color_palette("coolwarm", as_cmap=True)
 styled_pivot_df = (pivot_df.style
                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
                    .format( '{:,.0f}', subset=columns)
