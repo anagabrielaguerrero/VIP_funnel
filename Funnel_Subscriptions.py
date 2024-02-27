@@ -294,7 +294,7 @@ def format_nan(val):
     else: 
         return '{:.2%}'.format(val) 
 
-cm = sns.light_palette("green", as_cmap=True)
+cm = sns.light_palette("coolwarm", as_cmap=True)
 styled_pivot_df = (pivot_df.style
                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
                    .format( '{:,.0f}', subset=columns)
@@ -362,11 +362,10 @@ styled_pivot_df3 = (pivot_df.style
 #%%%
 with tab4:
     st.header("Comparación histórica")
-    st.write('Acciones previas')
     # st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones en flujo" (resaltados en naranja) y a "Otras acciones en payment" (resaldados en morado)')
+    st.markdown("<h3>Acciones previas</h3>", unsafe_allow_html=True)
     st.table(styled_pivot_df)
-    st.write('Cambio de flujo')
+    st.markdown("<h3>Cambio de flujo</h3>", unsafe_allow_html=True)
     st.table(styled_pivot_df2)
-
-    st.write('Acciones posteriores')
+    st.markdown("<h3>Acciones posteriores</h3>", unsafe_allow_html=True)
     st.table(styled_pivot_df3)
