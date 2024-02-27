@@ -8,3 +8,4 @@ oauth2client
 pygsheets
 attrdict
 gspread-pandas
+seaborn
