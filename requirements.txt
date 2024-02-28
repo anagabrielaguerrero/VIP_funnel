@@ -10,5 +10,4 @@ attrdict
 gspread-pandas
 seaborn
 networkx
-fuzzywuzzy
 collections
