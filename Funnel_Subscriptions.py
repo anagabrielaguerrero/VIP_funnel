@@ -17,21 +17,21 @@ from oauth2client.service_account import ServiceAccountCredentials
 gauth = GoogleAuth()
 gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
-# service_info = st.secrets['credentials']
+service_info = st.secrets['credentials']
 
-service_info = {
-  "type": "service_account",
-  "project_id": "theta-actor-415016",
-  "private_key_id": "cb72513aed67a84afa89bb182aaead4983281ed4",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDAc4mZrjvQWWWi\njXSCdxjw1BTVcYmaV52DJUWPnYWk2+pQ5/R2uWgju+f0kvkQOkcvCzSVZGy15Rq/\nLTNdrPiqN/nbY0AEol2FKXMsHCH38v9kXYgaSNmJvp9RZD8xyHck6aDjMuYuMRlY\nZFvSTgMaGBAGORvUChewWtw2J5MghMDawc7mJmEBnamViNqFyGyGv5LWTNWrsHXn\nNm5ffXPd5nF4w/eg1hxLBzfnUVGXe+Kh/sKOiG/9m3tLjIA+WeRDg5yquZe7P9kM\nLrjjh7p3RY5NT7ityEZr7FbUxhSrF/INf2e49DRnXqDZxb2y9I+/OqJTk7H4Wcw4\nYiT1rPDtAgMBAAECggEADETRVtzGr2ejlRNThCW3j1LV6S2NyisfvYaYwqkWJgZn\nD7VZ3l+/hdeq1+quuhwdAaDDP2rhi08Jv3pQNf6a868R3KydHi6Dq8OSthMtDzOM\nmIdl79cJF0DxwyyS4seW4OGMAi/ygKtcpEfxmpyikf1KuDrXzVK/Y9zHASTQulff\n1BO0/qjTmncCG+3TuprI7xmz+0J9aU1a2bu3JGMtGJfuIJScoUN91YDqHsbrGMLO\nyxXMNe6e+vmpWOcywhL0a8ODyaxnhta4Bk5Y92ztxyiajno2rX2aRy40muQix2MY\nfmQh6XsynQaq31ytHcH5QZprn7E5egM9sAUa4M3tAQKBgQDxxXOShO1bK73cg5GT\nly9Rhbionu7KZXEqcYG1LSFrJ/ZNQqlehlyEKNVCm3/avqp8DeFJqgSKYfJwB3GM\npH0zEu/j87iv9UZ7Om2MGN2YfZfymIiy5HIXPIzMFZs+fZCftGbU4zIBVeqLtAuS\nbgsLmHnWP9bYd7JIx7U2qRRTjQKBgQDLxwbZGDIk4hdm7m5p1NTvwIdHDDO5bQwu\n9lhkY1vSEamiCRV/3c6TDFYCjNOthby3tgY7RKnUmUrojPy0Czw/i4K3DIeCt/0c\nzouqqTc7lQtAV7eiLJUQn3lKOFISYKNkZNJ1Uy2qyFZPWvCsSMRSi8Batur6ZE1W\nY2RUBLwK4QKBgFRPbNwdasAuYskxQGTdhezB2wFCWzdNZMdOSdMqZ8r8ZpHOu01x\nQXX831GY9F8NuloEZRnRJkAzo92ZWumWuupColE1vqPtvqReXbFLQotY0NISiykH\nLRoZTWgl6LtEAlkPCgUXLWr10RLiuF5Z7ZQfme0y2fMm2o8yxWjIUYRJAoGBAMV/\n6nUybDcvIftTD5RnANI1yWbkvqTyuaIyhE0Xt4CMOdqf70R0l6gRhrMGBorhWZy8\nQKHk1K0GvYFSVAGz+fqknlYHQLdC14C59se7JZsLw1HjMklt6DOqPIXgvDqviuzc\ngtXPfi1N6ckTnLt98zkF1bKWInv4BrS5tB1yUUZBAoGAQK0yUBEKSSbRAV2Nhx6X\n4b0nX1bXNMedWoaWRezrk1BoQtFtpnRB7enpVsDRU9XJU61of41VdRG4UE8Fh+rm\n9m6Tr08mYprlvw+AnYizS7MN+6Nazrpk9sWUeMokoz3kPZco4/iEd5eVgAqeL1uP\neMoKigSNdbCFCA/oIUNiOo8=\n-----END PRIVATE KEY-----\n",
-  "client_email": "drive-prueba@theta-actor-415016.iam.gserviceaccount.com",
-  "client_id": "100476254397966367091",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/drive-prueba%40theta-actor-415016.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-}
+# service_info = {
+#   "type": "service_account",
+#   "project_id": "theta-actor-415016",
+#   "private_key_id": "cb72513aed67a84afa89bb182aaead4983281ed4",
+#   "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDAc4mZrjvQWWWi\njXSCdxjw1BTVcYmaV52DJUWPnYWk2+pQ5/R2uWgju+f0kvkQOkcvCzSVZGy15Rq/\nLTNdrPiqN/nbY0AEol2FKXMsHCH38v9kXYgaSNmJvp9RZD8xyHck6aDjMuYuMRlY\nZFvSTgMaGBAGORvUChewWtw2J5MghMDawc7mJmEBnamViNqFyGyGv5LWTNWrsHXn\nNm5ffXPd5nF4w/eg1hxLBzfnUVGXe+Kh/sKOiG/9m3tLjIA+WeRDg5yquZe7P9kM\nLrjjh7p3RY5NT7ityEZr7FbUxhSrF/INf2e49DRnXqDZxb2y9I+/OqJTk7H4Wcw4\nYiT1rPDtAgMBAAECggEADETRVtzGr2ejlRNThCW3j1LV6S2NyisfvYaYwqkWJgZn\nD7VZ3l+/hdeq1+quuhwdAaDDP2rhi08Jv3pQNf6a868R3KydHi6Dq8OSthMtDzOM\nmIdl79cJF0DxwyyS4seW4OGMAi/ygKtcpEfxmpyikf1KuDrXzVK/Y9zHASTQulff\n1BO0/qjTmncCG+3TuprI7xmz+0J9aU1a2bu3JGMtGJfuIJScoUN91YDqHsbrGMLO\nyxXMNe6e+vmpWOcywhL0a8ODyaxnhta4Bk5Y92ztxyiajno2rX2aRy40muQix2MY\nfmQh6XsynQaq31ytHcH5QZprn7E5egM9sAUa4M3tAQKBgQDxxXOShO1bK73cg5GT\nly9Rhbionu7KZXEqcYG1LSFrJ/ZNQqlehlyEKNVCm3/avqp8DeFJqgSKYfJwB3GM\npH0zEu/j87iv9UZ7Om2MGN2YfZfymIiy5HIXPIzMFZs+fZCftGbU4zIBVeqLtAuS\nbgsLmHnWP9bYd7JIx7U2qRRTjQKBgQDLxwbZGDIk4hdm7m5p1NTvwIdHDDO5bQwu\n9lhkY1vSEamiCRV/3c6TDFYCjNOthby3tgY7RKnUmUrojPy0Czw/i4K3DIeCt/0c\nzouqqTc7lQtAV7eiLJUQn3lKOFISYKNkZNJ1Uy2qyFZPWvCsSMRSi8Batur6ZE1W\nY2RUBLwK4QKBgFRPbNwdasAuYskxQGTdhezB2wFCWzdNZMdOSdMqZ8r8ZpHOu01x\nQXX831GY9F8NuloEZRnRJkAzo92ZWumWuupColE1vqPtvqReXbFLQotY0NISiykH\nLRoZTWgl6LtEAlkPCgUXLWr10RLiuF5Z7ZQfme0y2fMm2o8yxWjIUYRJAoGBAMV/\n6nUybDcvIftTD5RnANI1yWbkvqTyuaIyhE0Xt4CMOdqf70R0l6gRhrMGBorhWZy8\nQKHk1K0GvYFSVAGz+fqknlYHQLdC14C59se7JZsLw1HjMklt6DOqPIXgvDqviuzc\ngtXPfi1N6ckTnLt98zkF1bKWInv4BrS5tB1yUUZBAoGAQK0yUBEKSSbRAV2Nhx6X\n4b0nX1bXNMedWoaWRezrk1BoQtFtpnRB7enpVsDRU9XJU61of41VdRG4UE8Fh+rm\n9m6Tr08mYprlvw+AnYizS7MN+6Nazrpk9sWUeMokoz3kPZco4/iEd5eVgAqeL1uP\neMoKigSNdbCFCA/oIUNiOo8=\n-----END PRIVATE KEY-----\n",
+#   "client_email": "drive-prueba@theta-actor-415016.iam.gserviceaccount.com",
+#   "client_id": "100476254397966367091",
+#   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+#   "token_uri": "https://oauth2.googleapis.com/token",
+#   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+#   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/drive-prueba%40theta-actor-415016.iam.gserviceaccount.com",
+#   "universe_domain": "googleapis.com"
+# }
 
 
 gauth.credentials  = ServiceAccountCredentials.from_json_keyfile_dict(service_info,scope)
