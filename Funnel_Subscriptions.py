@@ -374,9 +374,11 @@ with tab4:
     st.table(styled_pivot_df3)
 
 #%%% Campañas 
-folder_id = '1juC34pcnAZu5QeTDB-k5xbyOnNlamxJ3'
-file_name = 'campaign_names_transform'
-file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
+sh = client.open('campaign_names_transform')
+worksheet_list = sh.worksheets()
+# folder_id = '1juC34pcnAZu5QeTDB-k5xbyOnNlamxJ3'
+# file_name = 'campaign_names_transform'
+# file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
 
 df = load_the_spreadsheet('transformed')
 styled_pivot_df4 = (df.style
