@@ -379,9 +379,15 @@ styled_pivot_df0 = (pivot_df.style
                    .format(format_nan,subset=pivot_df.columns[num_columns:])
                    .applymap(lambda x: color_nan_background(x)))
 
-#%%%
+#%%%-------------------------------------------------------------------------------------------------------------
 with tab4:
     st.header("Comparación histórica: Acciones")
+    st.button("Mostrar diferencia absoluta", type="primary")
+    if st.button('Mostrar diferencia porcentual'):
+        st.write('Diferencia porcentual ')
+    else:
+        st.write('Diferencia absoluta')
+
     st.markdown("<h3>Click on Button for purchase membership</h3>", unsafe_allow_html=True)
     st.table(styled_pivot_df0)
     st.markdown("<h3>Acciones previas</h3>", unsafe_allow_html=True)
