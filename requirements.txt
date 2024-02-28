@@ -9,5 +9,4 @@ pygsheets
 attrdict
 gspread-pandas
 seaborn
-networkx == 3.1
 collections
