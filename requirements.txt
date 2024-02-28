@@ -9,5 +9,5 @@ pygsheets
 attrdict
 gspread-pandas
 seaborn
-networkx==2.8.6
+networkx
 collections
