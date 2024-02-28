@@ -13,6 +13,12 @@ from pydrive2.drive import GoogleDrive
 from oauth2client.service_account import ServiceAccountCredentials
 
 
+import networkx as nx
+import itertools
+from fuzzywuzzy import fuzz
+from collections import Counter
+
+
 # Authenticate using the service account credentials
 gauth = GoogleAuth()
 gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
@@ -206,7 +212,7 @@ post1= post1.reindex(['Source', 'Target', 'Clicks','%'], axis=1)
 styled_df = post1.style.apply(select_col1, axis=None)
 
 
-tab0, tab1, tab2, tab3, tab4 = st.tabs(['Funnel Subscriptions',"Acciones previas", "Cambio de flujo", "Acciones posteriores ", "Comparación histórica"])
+tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs(['Funnel Subscriptions',"Acciones previas", "Cambio de flujo", "Acciones posteriores ", "Comparación histórica: acciones", "Comparación histórica: campañas"])
 
 with tab0:
     st.header("Funnel Subscriptions")
@@ -295,7 +301,7 @@ def format_nan(val):
         return '{:.2%}'.format(val) 
 
 # cm = sns.light_palette("green", as_cmap=True)
-cm = sns.color_palette("coolwarm", as_cmap=True)
+cm = sns.color_palette("coolwarm _r", as_cmap=True)
 styled_pivot_df = (pivot_df.style
                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
                    .format( '{:,.0f}', subset=columns)
@@ -360,9 +366,11 @@ styled_pivot_df3 = (pivot_df.style
                    .format(format_nan,subset=pivot_df.columns[num_columns:])
                    .applymap(lambda x: color_nan_background(x)))
 
+
+
 #%%%
 with tab4:
-    st.header("Comparación histórica")
+    st.header("Comparación histórica: Acciones")
     # st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones en flujo" (resaltados en naranja) y a "Otras acciones en payment" (resaldados en morado)')
     st.markdown("<h3>Acciones previas</h3>", unsafe_allow_html=True)
     st.table(styled_pivot_df)
@@ -370,3 +378,64 @@ with tab4:
     st.table(styled_pivot_df2)
     st.markdown("<h3>Acciones posteriores</h3>", unsafe_allow_html=True)
     st.table(styled_pivot_df3)
+
+#%%% Campañas 
+file_name = 'campaign_names'
+file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
+
+df = load_the_spreadsheet('campaign_names')
+
+#al considerar umbral mayor a 60 se encontraron estos url que vinenen de apple: 
+for i in [41,53,119,61,31]:
+    df.loc[i,'extracted_substring'] ='utm_campaign=vip_vip100_20230501_null'
+#al considerar umbral mayor a 97 hay distintas fechas en las que salió la campaña: 
+for i in [19,79]:
+    df.loc[i,'extracted_substring'] = 'utm_campaign=_VIP_Resurrections_20231031_null'
+for i in [132,6,44]:
+    df.loc[i,'extracted_substring'] = 'utm_campaign=_VIP100_20230922_null#popupInfo'
+for i in [59,156,117]:
+    df.loc[i,'extracted_substring'] = 'utm_campaign=_VIP_Resurrections_20231121_null'
+df['extracted_substring'] = df['extracted_substring'].str.replace('#popupInfo', '')
+campaings = list(df.extracted_substring)
+matriz_clasificacion = np.zeros((len(campaings),len(campaings)))
+for i in range(len(campaings)): 
+    similitud = [fuzz.ratio(campaings[i], cadena) for cadena in campaings]
+    matriz_clasificacion[i] = similitud
+indices = np.where(matriz_clasificacion > 98)
+matriz_umbral = np.zeros_like(matriz_clasificacion)
+G = nx.Graph()
+for i, j in zip(indices[0], indices[1]):
+    if i != j:
+        matriz_umbral[i,j] = matriz_clasificacion[i,j]
+        G.add_edge(i,j)
+S = [G.subgraph(c).copy() for c in nx.connected_components(G)]
+cat = []
+for i in range(len(S)):
+    c = []
+    for j in set(list(itertools.chain(*S[i].edges))):
+        c.append(campaings[j])
+    cat.append(c)
+cats_labels = []
+for i in range(len(cat)):
+    frases_similares = cat[i]
+    conteo_frases = Counter(frases_similares)
+    frase_promedio = conteo_frases.most_common(1)[0][0]
+    cats_labels.append(frase_promedio)
+    print(i, frase_promedio)
+for i in range(len(cats_labels)):
+    for j in set(list(itertools.chain(*S[i].edges))):
+        df.loc[j,'extracted_substring'] = cats_labels[i]
+aggregated_df = pd.DataFrame(df.groupby(["ym"])["extracted_substring"].value_counts().reset_index(name='Cuentas'))
+pivot_df = aggregated_df.pivot(index='extracted_substring', columns='ym', values='Cuentas').fillna(0)
+pivot_df.columns = pivot_df.columns.astype(str)
+pivot_df, columns, num_columns = pct_change(pivot_df)
+styled_pivot_df4 = (pivot_df.style
+                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                   .format( '{:,.0f}', subset=columns)
+                   .format(format_nan,subset=pivot_df.columns[num_columns:])
+                   .applymap(lambda x: color_nan_background(x)))
+#%%%%
+with tab5:
+    st.header("Comparación histórica: Campañas")
+    st.markdown("<h3>Campañas</h3>", unsafe_allow_html=True)
+    st.table(styled_pivot_df4)
