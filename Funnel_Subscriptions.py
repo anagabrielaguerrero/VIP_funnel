@@ -305,6 +305,7 @@ styled_pivot_df = (pivot_df.style
 
 dfs_post = []
 dfs_post1 = []
+dfs_click = []
 for i,j in enumerate(hist_sh):
     sh = client.open(j)
     worksheet_list = sh.worksheets()
@@ -314,6 +315,7 @@ for i,j in enumerate(hist_sh):
     post = pd.DataFrame(post1.groupby('Source')['Clicks'].sum()).reset_index()
     post.rename(columns= {'Source':'Target'}, inplace = True)
     post['Source'] = 'Click on Button for purchase membership' 
+    click = post.groupby('Source')['Clicks'].sum().reset_index()
     post1 = post1[post1.Source != 'No more actions']
     post.insert(1,'%',[round(x*100/post.Clicks.sum(),2) for x in list(post.Clicks) ])
     post1.insert(1,'%',[round(x*100/post1.Clicks.sum(),2) for x in list(post1.Clicks) ])
@@ -326,6 +328,7 @@ for i,j in enumerate(hist_sh):
     new_post1 = pd.concat([new_post1,new_row_post1_1,new_row_post1_2], ignore_index=True)
     dfs_post.append(post)
     dfs_post1.append(new_post1)
+    dfs_click.append(click)
 
 for i, month_df in enumerate(dfs_post):
     month_df['Month'] = hist_sh[i]
@@ -360,12 +363,27 @@ styled_pivot_df3 = (pivot_df.style
                    .format(format_nan,subset=pivot_df.columns[num_columns:])
                    .applymap(lambda x: color_nan_background(x)))
 
+result_df = pd.concat(dfs_click, ignore_index=True)
+for i, month_df in enumerate(dfs_click):
+    month_df['Month'] = hist_sh[i]
 
+result_df = pd.concat(dfs_click, ignore_index=True)
+aggregated_df = result_df.groupby(['Month','Source'])['Clicks'].sum().reset_index()
+aggregated_df.rename(columns= {'Month': ' ', 'Source': 'Action'}, inplace = True)
+pivot_df = aggregated_df.pivot(index='Action', columns=' ', values='Clicks').fillna(0)
+pivot_df, columns, num_columns = pct_change(pivot_df)
+
+styled_pivot_df0 = (pivot_df.style
+                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                   .format( '{:,.0f}', subset=columns)
+                   .format(format_nan,subset=pivot_df.columns[num_columns:])
+                   .applymap(lambda x: color_nan_background(x)))
 
 #%%%
 with tab4:
     st.header("Comparación histórica: Acciones")
-    # st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones en flujo" (resaltados en naranja) y a "Otras acciones en payment" (resaldados en morado)')
+    st.markdown("<h3>Click on Button for purchase membership</h3>", unsafe_allow_html=True)
+    st.table(styled_pivot_df0)
     st.markdown("<h3>Acciones previas</h3>", unsafe_allow_html=True)
     st.table(styled_pivot_df)
     st.markdown("<h3>Cambio de flujo</h3>", unsafe_allow_html=True)
@@ -376,10 +394,6 @@ with tab4:
 #%%% Campañas 
 sh = client.open('campaign_names_transform')
 worksheet_list = sh.worksheets()
-# folder_id = '1juC34pcnAZu5QeTDB-k5xbyOnNlamxJ3'
-# file_name = 'campaign_names_transform'
-# file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
-
 df = load_the_spreadsheet('transformed')
 pivot_df = df.pivot(index='extracted_substring', columns='ym', values='Cuentas').fillna(0)
 pivot_df.columns = pivot_df.columns.astype(str)
@@ -389,8 +403,6 @@ styled_pivot_df4 = (pivot_df.style
                    .format( '{:,.0f}', subset=columns)
                    .format(format_nan,subset=pivot_df.columns[num_columns:])
                    .applymap(lambda x: color_nan_background(x)))
-
-
 
 #%%%%
 with tab5:
