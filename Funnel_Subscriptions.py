@@ -229,165 +229,165 @@ with tab3:
     st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones en flujo" (resaltados en naranja) y a "Otras acciones en payment" (resaldados en morado)')
     st.table(styled_df.format( precision=2))
 
-#%%%--------------------------
-import seaborn as sns
+# #%%%--------------------------
+# import seaborn as sns
 
-hist_sh = []
-for file in file_list:
-    if file['title'].isdigit():
-        print(f"File '{file['title']}' contains only numbers.")
-        hist_sh.append(file['title']) 
+# hist_sh = []
+# for file in file_list:
+#     if file['title'].isdigit():
+#         print(f"File '{file['title']}' contains only numbers.")
+#         hist_sh.append(file['title']) 
 
-dfs_prev = []
-for i,j in enumerate(hist_sh):
-    sh = client.open(j)
-    worksheet_list = sh.worksheets()
-    prev = load_the_spreadsheet('prev')
-    prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
-    prev['Target'] = 'Click on Button for purchase membership' 
-    prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
-    carousel = prev[prev.apply(lambda row: row.astype(str).str.contains('Clicked carousel image').any(), axis=1)]
-    prev2 = prev.drop(index=carousel.index)
-    new_row = pd.DataFrame.from_dict({'Clicks':[carousel.Clicks.sum()], 'Source':['Clicked carousel image'],'Target':['Click on Button for purchase membership']})
-    prev2 = pd.concat([prev2,new_row], ignore_index=True)
-    prev.insert(1,'%',[round(x*100/prev.Clicks.sum(),2) for x in list(prev.Clicks) ])
-    prev2.insert(1,'%',[round(x*100/prev2.Clicks.sum(),2) for x in list(prev2.Clicks) ])
-    otros_prev2 = prev2[prev2['%']<4]
-    new_prev2 = prev2.drop(index= otros_prev2.index)
-    new_row_prev2 = pd.DataFrame.from_dict({'Clicks':[otros_prev2.Clicks.sum()], 'Source':['Otras acciones'],'Target':['Click on Button for purchase membership']})
-    new_prev2 = pd.concat([new_prev2,new_row_prev2], ignore_index=True)
-    dfs_prev.append(new_prev2)
+# dfs_prev = []
+# for i,j in enumerate(hist_sh):
+#     sh = client.open(j)
+#     worksheet_list = sh.worksheets()
+#     prev = load_the_spreadsheet('prev')
+#     prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
+#     prev['Target'] = 'Click on Button for purchase membership' 
+#     prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
+#     carousel = prev[prev.apply(lambda row: row.astype(str).str.contains('Clicked carousel image').any(), axis=1)]
+#     prev2 = prev.drop(index=carousel.index)
+#     new_row = pd.DataFrame.from_dict({'Clicks':[carousel.Clicks.sum()], 'Source':['Clicked carousel image'],'Target':['Click on Button for purchase membership']})
+#     prev2 = pd.concat([prev2,new_row], ignore_index=True)
+#     prev.insert(1,'%',[round(x*100/prev.Clicks.sum(),2) for x in list(prev.Clicks) ])
+#     prev2.insert(1,'%',[round(x*100/prev2.Clicks.sum(),2) for x in list(prev2.Clicks) ])
+#     otros_prev2 = prev2[prev2['%']<4]
+#     new_prev2 = prev2.drop(index= otros_prev2.index)
+#     new_row_prev2 = pd.DataFrame.from_dict({'Clicks':[otros_prev2.Clicks.sum()], 'Source':['Otras acciones'],'Target':['Click on Button for purchase membership']})
+#     new_prev2 = pd.concat([new_prev2,new_row_prev2], ignore_index=True)
+#     dfs_prev.append(new_prev2)
 
-result_df = pd.concat(dfs_prev, ignore_index=True)
-for i, month_df in enumerate(dfs_prev):
-    month_df['Month'] = hist_sh[i]
+# result_df = pd.concat(dfs_prev, ignore_index=True)
+# for i, month_df in enumerate(dfs_prev):
+#     month_df['Month'] = hist_sh[i]
 
-result_df = pd.concat(dfs_prev, ignore_index=True)
+# result_df = pd.concat(dfs_prev, ignore_index=True)
 
-aggregated_df = result_df.groupby(['Source', 'Month'])['Clicks'].sum().reset_index()
-aggregated_df.rename(columns= {'Source':'Acciones previas','Month': ' '}, inplace = True)
-pivot_df = aggregated_df.pivot(index='Acciones previas', columns=' ', values='Clicks').fillna(0)
+# aggregated_df = result_df.groupby(['Source', 'Month'])['Clicks'].sum().reset_index()
+# aggregated_df.rename(columns= {'Source':'Acciones previas','Month': ' '}, inplace = True)
+# pivot_df = aggregated_df.pivot(index='Acciones previas', columns=' ', values='Clicks').fillna(0)
 
-def pct_change(piv_df):
-    columns = piv_df.columns
-    num_columns = len(columns)
-    print(num_columns)
-    for i in range(num_columns - 1): 
-        col1 = columns[i]
-        col2 = columns[i + 1]
-        new_col_name = f'{col2} '
-        piv_df[columns[0]+ ' '] = float('nan') #cambio_porcentual = pivot_df.pct_change(axis='columns')
-        piv_df[new_col_name] =( piv_df[col2] / piv_df[col1] - 1)
-        mask_inf_nan = (piv_df[new_col_name] == float('inf')) | piv_df[new_col_name].isna()
-        piv_df.loc[mask_inf_nan, new_col_name] =  float('nan') 
-    return piv_df, columns, num_columns
+# def pct_change(piv_df):
+#     columns = piv_df.columns
+#     num_columns = len(columns)
+#     print(num_columns)
+#     for i in range(num_columns - 1): 
+#         col1 = columns[i]
+#         col2 = columns[i + 1]
+#         new_col_name = f'{col2} '
+#         piv_df[columns[0]+ ' '] = float('nan') #cambio_porcentual = pivot_df.pct_change(axis='columns')
+#         piv_df[new_col_name] =( piv_df[col2] / piv_df[col1] - 1)
+#         mask_inf_nan = (piv_df[new_col_name] == float('inf')) | piv_df[new_col_name].isna()
+#         piv_df.loc[mask_inf_nan, new_col_name] =  float('nan') 
+#     return piv_df, columns, num_columns
 
-pivot_df, columns, num_columns = pct_change(pivot_df)
+# pivot_df, columns, num_columns = pct_change(pivot_df)
 
-def color_nan_background(val):
-    if np.isnan(val):
-        return 'background-color: black'
+# def color_nan_background(val):
+#     if np.isnan(val):
+#         return 'background-color: black'
     
-def format_nan(val):
-    if np.isnan(val):
-        return 'NA'
-    else: 
-        return '{:.2%}'.format(val) 
+# def format_nan(val):
+#     if np.isnan(val):
+#         return 'NA'
+#     else: 
+#         return '{:.2%}'.format(val) 
 
-# cm = sns.light_palette("green", as_cmap=True)
-cm = sns.color_palette("coolwarm_r", as_cmap=True)
-styled_pivot_df = (pivot_df.style
-                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
-                   .format( '{:,.0f}', subset=columns)
-                   .format(format_nan,subset=pivot_df.columns[num_columns:])
-                   .applymap(lambda x: color_nan_background(x)))
-#### --------------------------------------------
+# # cm = sns.light_palette("green", as_cmap=True)
+# cm = sns.color_palette("coolwarm_r", as_cmap=True)
+# styled_pivot_df = (pivot_df.style
+#                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+#                    .format( '{:,.0f}', subset=columns)
+#                    .format(format_nan,subset=pivot_df.columns[num_columns:])
+#                    .applymap(lambda x: color_nan_background(x)))
+# #### --------------------------------------------
 
-dfs_post = []
-dfs_post1 = []
-for i,j in enumerate(hist_sh):
-    sh = client.open(j)
-    worksheet_list = sh.worksheets()
-    post1 = load_the_spreadsheet('post1')
-    post1 = load_the_spreadsheet('post1')
-    post1.rename(columns= {'SUM(conteo)':'Clicks','category':'Source','subcategory':'Target'}, inplace = True)
-    post = pd.DataFrame(post1.groupby('Source')['Clicks'].sum()).reset_index()
-    post.rename(columns= {'Source':'Target'}, inplace = True)
-    post['Source'] = 'Click on Button for purchase membership' 
-    post1 = post1[post1.Source != 'No more actions']
-    post.insert(1,'%',[round(x*100/post.Clicks.sum(),2) for x in list(post.Clicks) ])
-    post1.insert(1,'%',[round(x*100/post1.Clicks.sum(),2) for x in list(post1.Clicks) ])
-    otros_post1 =  post1[post1['%']<4] 
-    otros_int = otros_post1[otros_post1.Source == 'Interacting With Payment Page']
-    otros_change = otros_post1[otros_post1.Source == 'Change Flow']
-    new_post1 =  post1.drop(index= otros_post1.index)
-    new_row_post1_1 = pd.DataFrame.from_dict({'Clicks':[otros_int.Clicks.sum()], 'Source':['Interacting With Payment Page'],'Target':['Otras acciones en payment']})
-    new_row_post1_2 = pd.DataFrame.from_dict({'Clicks':[otros_change.Clicks.sum()], 'Source':['Change Flow'],'Target':['Otras acciones en flujo']})
-    new_post1 = pd.concat([new_post1,new_row_post1_1,new_row_post1_2], ignore_index=True)
-    dfs_post.append(post)
-    dfs_post1.append(new_post1)
+# dfs_post = []
+# dfs_post1 = []
+# for i,j in enumerate(hist_sh):
+#     sh = client.open(j)
+#     worksheet_list = sh.worksheets()
+#     post1 = load_the_spreadsheet('post1')
+#     post1 = load_the_spreadsheet('post1')
+#     post1.rename(columns= {'SUM(conteo)':'Clicks','category':'Source','subcategory':'Target'}, inplace = True)
+#     post = pd.DataFrame(post1.groupby('Source')['Clicks'].sum()).reset_index()
+#     post.rename(columns= {'Source':'Target'}, inplace = True)
+#     post['Source'] = 'Click on Button for purchase membership' 
+#     post1 = post1[post1.Source != 'No more actions']
+#     post.insert(1,'%',[round(x*100/post.Clicks.sum(),2) for x in list(post.Clicks) ])
+#     post1.insert(1,'%',[round(x*100/post1.Clicks.sum(),2) for x in list(post1.Clicks) ])
+#     otros_post1 =  post1[post1['%']<4] 
+#     otros_int = otros_post1[otros_post1.Source == 'Interacting With Payment Page']
+#     otros_change = otros_post1[otros_post1.Source == 'Change Flow']
+#     new_post1 =  post1.drop(index= otros_post1.index)
+#     new_row_post1_1 = pd.DataFrame.from_dict({'Clicks':[otros_int.Clicks.sum()], 'Source':['Interacting With Payment Page'],'Target':['Otras acciones en payment']})
+#     new_row_post1_2 = pd.DataFrame.from_dict({'Clicks':[otros_change.Clicks.sum()], 'Source':['Change Flow'],'Target':['Otras acciones en flujo']})
+#     new_post1 = pd.concat([new_post1,new_row_post1_1,new_row_post1_2], ignore_index=True)
+#     dfs_post.append(post)
+#     dfs_post1.append(new_post1)
 
-for i, month_df in enumerate(dfs_post):
-    month_df['Month'] = hist_sh[i]
+# for i, month_df in enumerate(dfs_post):
+#     month_df['Month'] = hist_sh[i]
 
-result_df = pd.concat(dfs_post, ignore_index=True)
+# result_df = pd.concat(dfs_post, ignore_index=True)
 
-aggregated_df = result_df.groupby(['Target', 'Month'])['Clicks'].sum().reset_index()
-aggregated_df.rename(columns= {'Target':'Cambio de flujo','Month': ' '}, inplace = True)
-pivot_df = aggregated_df.pivot(index='Cambio de flujo', columns=' ', values='Clicks').fillna(0)
+# aggregated_df = result_df.groupby(['Target', 'Month'])['Clicks'].sum().reset_index()
+# aggregated_df.rename(columns= {'Target':'Cambio de flujo','Month': ' '}, inplace = True)
+# pivot_df = aggregated_df.pivot(index='Cambio de flujo', columns=' ', values='Clicks').fillna(0)
 
-pivot_df, columns, num_columns = pct_change(pivot_df)
+# pivot_df, columns, num_columns = pct_change(pivot_df)
 
-styled_pivot_df2 = (pivot_df.style
-                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
-                   .format( '{:,.0f}', subset=columns)
-                   .format(format_nan,subset=pivot_df.columns[num_columns:])
-                   .applymap(lambda x: color_nan_background(x)))
-
-
-for i, month_df in enumerate(dfs_post1):
-    month_df['Month'] = hist_sh[i]
-result_df = pd.concat(dfs_post1, ignore_index=True)
-aggregated_df = result_df.groupby(['Target', 'Month'])['Clicks'].sum().reset_index()
-aggregated_df.rename(columns= {'Target':'Cambio de flujo','Month': ' '}, inplace = True)
-pivot_df = aggregated_df.pivot(index='Cambio de flujo', columns=' ', values='Clicks').fillna(0)
-
-pivot_df, columns, num_columns = pct_change(pivot_df)
-
-styled_pivot_df3 = (pivot_df.style
-                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
-                   .format( '{:,.0f}', subset=columns)
-                   .format(format_nan,subset=pivot_df.columns[num_columns:])
-                   .applymap(lambda x: color_nan_background(x)))
+# styled_pivot_df2 = (pivot_df.style
+#                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+#                    .format( '{:,.0f}', subset=columns)
+#                    .format(format_nan,subset=pivot_df.columns[num_columns:])
+#                    .applymap(lambda x: color_nan_background(x)))
 
 
+# for i, month_df in enumerate(dfs_post1):
+#     month_df['Month'] = hist_sh[i]
+# result_df = pd.concat(dfs_post1, ignore_index=True)
+# aggregated_df = result_df.groupby(['Target', 'Month'])['Clicks'].sum().reset_index()
+# aggregated_df.rename(columns= {'Target':'Cambio de flujo','Month': ' '}, inplace = True)
+# pivot_df = aggregated_df.pivot(index='Cambio de flujo', columns=' ', values='Clicks').fillna(0)
 
-#%%%
-with tab4:
-    st.header("Comparación histórica: Acciones")
-    # st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones en flujo" (resaltados en naranja) y a "Otras acciones en payment" (resaldados en morado)')
-    st.markdown("<h3>Acciones previas</h3>", unsafe_allow_html=True)
-    st.table(styled_pivot_df)
-    st.markdown("<h3>Cambio de flujo</h3>", unsafe_allow_html=True)
-    st.table(styled_pivot_df2)
-    st.markdown("<h3>Acciones posteriores</h3>", unsafe_allow_html=True)
-    st.table(styled_pivot_df3)
+# pivot_df, columns, num_columns = pct_change(pivot_df)
 
-#%%% Campañas 
-file_name = 'campaign_names_transform'
-file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
-
-df = load_the_spreadsheet('campaign_names')
-styled_pivot_df4 = (df.style
-                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
-                   .format( '{:,.0f}', subset=columns)
-                   .format(format_nan,subset=pivot_df.columns[num_columns:])
-                   .applymap(lambda x: color_nan_background(x)))
+# styled_pivot_df3 = (pivot_df.style
+#                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+#                    .format( '{:,.0f}', subset=columns)
+#                    .format(format_nan,subset=pivot_df.columns[num_columns:])
+#                    .applymap(lambda x: color_nan_background(x)))
 
 
 
-#%%%%
-with tab5:
-    st.header("Comparación histórica: Campañas")
-    st.markdown("<h3>Campañas</h3>", unsafe_allow_html=True)
-    st.table(styled_pivot_df4)
+# #%%%
+# with tab4:
+#     st.header("Comparación histórica: Acciones")
+#     # st.write(f'Nota: Los porcentajes menores al 4% se añadieron a "Otras acciones en flujo" (resaltados en naranja) y a "Otras acciones en payment" (resaldados en morado)')
+#     st.markdown("<h3>Acciones previas</h3>", unsafe_allow_html=True)
+#     st.table(styled_pivot_df)
+#     st.markdown("<h3>Cambio de flujo</h3>", unsafe_allow_html=True)
+#     st.table(styled_pivot_df2)
+#     st.markdown("<h3>Acciones posteriores</h3>", unsafe_allow_html=True)
+#     st.table(styled_pivot_df3)
+
+# #%%% Campañas 
+# file_name = 'campaign_names_transform'
+# file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
+
+# df = load_the_spreadsheet('campaign_names')
+# styled_pivot_df4 = (df.style
+#                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+#                    .format( '{:,.0f}', subset=columns)
+#                    .format(format_nan,subset=pivot_df.columns[num_columns:])
+#                    .applymap(lambda x: color_nan_background(x)))
+
+
+
+# #%%%%
+# with tab5:
+#     st.header("Comparación histórica: Campañas")
+#     st.markdown("<h3>Campañas</h3>", unsafe_allow_html=True)
+#     st.table(styled_pivot_df4)
