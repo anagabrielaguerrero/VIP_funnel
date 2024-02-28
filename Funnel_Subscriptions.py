@@ -381,7 +381,10 @@ worksheet_list = sh.worksheets()
 # file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
 
 df = load_the_spreadsheet('transformed')
-styled_pivot_df4 = (df.style
+pivot_df = f.pivot(index='extracted_substring', columns='ym', values='Cuentas').fillna(0)
+pivot_df.columns = pivot_df.columns.astype(str)
+pivot_df, columns, num_columns = pct_change(pivot_df)
+styled_pivot_df4 = (pivot_df.style
                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
                    .format( '{:,.0f}', subset=columns)
                    .format(format_nan,subset=pivot_df.columns[num_columns:])
