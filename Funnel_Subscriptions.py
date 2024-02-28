@@ -380,60 +380,18 @@ with tab4:
     st.table(styled_pivot_df3)
 
 #%%% Campañas 
-file_name = 'campaign_names'
+file_name = 'campaign_names_transform'
 file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
 
 df = load_the_spreadsheet('campaign_names')
-
-#al considerar umbral mayor a 60 se encontraron estos url que vinenen de apple: 
-for i in [41,53,119,61,31]:
-    df.loc[i,'extracted_substring'] ='utm_campaign=vip_vip100_20230501_null'
-#al considerar umbral mayor a 97 hay distintas fechas en las que salió la campaña: 
-for i in [19,79]:
-    df.loc[i,'extracted_substring'] = 'utm_campaign=_VIP_Resurrections_20231031_null'
-for i in [132,6,44]:
-    df.loc[i,'extracted_substring'] = 'utm_campaign=_VIP100_20230922_null#popupInfo'
-for i in [59,156,117]:
-    df.loc[i,'extracted_substring'] = 'utm_campaign=_VIP_Resurrections_20231121_null'
-df['extracted_substring'] = df['extracted_substring'].str.replace('#popupInfo', '')
-campaings = list(df.extracted_substring)
-matriz_clasificacion = np.zeros((len(campaings),len(campaings)))
-for i in range(len(campaings)): 
-    similitud = [fuzz.ratio(campaings[i], cadena) for cadena in campaings]
-    matriz_clasificacion[i] = similitud
-indices = np.where(matriz_clasificacion > 98)
-matriz_umbral = np.zeros_like(matriz_clasificacion)
-G = nx.Graph()
-for i, j in zip(indices[0], indices[1]):
-    if i != j:
-        matriz_umbral[i,j] = matriz_clasificacion[i,j]
-        G.add_edge(i,j)
-S = [G.subgraph(c).copy() for c in nx.connected_components(G)]
-cat = []
-for i in range(len(S)):
-    c = []
-    for j in set(list(itertools.chain(*S[i].edges))):
-        c.append(campaings[j])
-    cat.append(c)
-cats_labels = []
-for i in range(len(cat)):
-    frases_similares = cat[i]
-    conteo_frases = Counter(frases_similares)
-    frase_promedio = conteo_frases.most_common(1)[0][0]
-    cats_labels.append(frase_promedio)
-    print(i, frase_promedio)
-for i in range(len(cats_labels)):
-    for j in set(list(itertools.chain(*S[i].edges))):
-        df.loc[j,'extracted_substring'] = cats_labels[i]
-aggregated_df = pd.DataFrame(df.groupby(["ym"])["extracted_substring"].value_counts().reset_index(name='Cuentas'))
-pivot_df = aggregated_df.pivot(index='extracted_substring', columns='ym', values='Cuentas').fillna(0)
-pivot_df.columns = pivot_df.columns.astype(str)
-pivot_df, columns, num_columns = pct_change(pivot_df)
-styled_pivot_df4 = (pivot_df.style
+styled_pivot_df4 = (df.style
                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
                    .format( '{:,.0f}', subset=columns)
                    .format(format_nan,subset=pivot_df.columns[num_columns:])
                    .applymap(lambda x: color_nan_background(x)))
+
+
+
 #%%%%
 with tab5:
     st.header("Comparación histórica: Campañas")
