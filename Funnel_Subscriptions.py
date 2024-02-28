@@ -13,12 +13,6 @@ from pydrive2.drive import GoogleDrive
 from oauth2client.service_account import ServiceAccountCredentials
 
 
-import networkx as nx
-import itertools
-from fuzzywuzzy import fuzz
-from collections import Counter
-
-
 # Authenticate using the service account credentials
 gauth = GoogleAuth()
 gauth.service_account_email = 'drive-prueba@theta-actor-415016.iam.gserviceaccount.com'
