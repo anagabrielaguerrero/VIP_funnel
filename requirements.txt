@@ -9,4 +9,3 @@ pygsheets
 attrdict
 gspread-pandas
 seaborn
-collections
