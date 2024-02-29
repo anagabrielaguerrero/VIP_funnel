@@ -271,7 +271,9 @@ def format_nan_abs(val):
         return '{:,.0f}'.format(val) 
 
 # cm = sns.light_palette("green", as_cmap=True)
-cm = sns.color_palette("coolwarm_r", as_cmap=True)
+    
+
+
 
 #%%% 
 dfs_prev = []
@@ -325,7 +327,6 @@ with tab4:
     st.button("Mostrar diferencia absoluta", type="primary")
     if st.button('Mostrar diferencia porcentual'):
         st.write('Diferencia porcentual ')
-        
         for i, month_df in enumerate(dfs_prev):
             month_df['Month'] = hist_sh[i]
         result_df = pd.concat(dfs_prev, ignore_index=True)
@@ -333,8 +334,11 @@ with tab4:
         aggregated_df.rename(columns= {'Source':'Acciones previas','Month': ' '}, inplace = True)
         pivot_df = aggregated_df.pivot(index='Acciones previas', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = pct_change(pivot_df)
+        num_colors = len(list((pivot_df[pivot_df.columns[num_columns:]]).stack().unique()))
+        # cm = sns.color_palette("coolwarm_r", as_cmap=True, n_colors= num_colors)  
+        cm =sns.diverging_palette(220, 20, as_cmap=True)
         styled_pivot_df = (pivot_df.style
-                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
                         .format(format_nan,subset=pivot_df.columns[num_columns:])
                         .applymap(lambda x: color_nan_background(x)))
@@ -347,7 +351,7 @@ with tab4:
         pivot_df = aggregated_df.pivot(index='Cambio de flujo', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = pct_change(pivot_df)
         styled_pivot_df2 = (pivot_df.style
-                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
                         .format(format_nan,subset=pivot_df.columns[num_columns:])
                         .applymap(lambda x: color_nan_background(x)))
@@ -361,7 +365,7 @@ with tab4:
         pivot_df = aggregated_df.pivot(index='Cambio de flujo', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = pct_change(pivot_df)
         styled_pivot_df3 = (pivot_df.style
-                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
                         .format(format_nan,subset=pivot_df.columns[num_columns:])
                         .applymap(lambda x: color_nan_background(x)))
@@ -373,8 +377,10 @@ with tab4:
         aggregated_df.rename(columns= {'Month': ' ', 'Source': 'Action'}, inplace = True)
         pivot_df = aggregated_df.pivot(index='Action', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = pct_change(pivot_df)
-        styled_pivot_df0 = (pivot_df.style
-                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+        num_colors = len(list((pivot_df[pivot_df.columns[num_columns:]]).stack().unique()))
+        cm =sns.diverging_palette(220, 20, as_cmap=True)
+        styled_pivot_df0 = (pivot_df.styles
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
                         .format(format_nan,subset=pivot_df.columns[num_columns:])
                         .applymap(lambda x: color_nan_background(x)))
@@ -388,8 +394,10 @@ with tab4:
         aggregated_df.rename(columns= {'Source':'Acciones previas','Month': ' '}, inplace = True)
         pivot_df = aggregated_df.pivot(index='Acciones previas', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = abs_change(pivot_df)
+        num_colors = abs(round(pivot_df[pivot_df.columns[num_columns:]].min().min())) + abs(round(pivot_df[pivot_df.columns[num_columns:]].max().max())) + 1 
+        cm =sns.diverging_palette(220, 20, as_cmap=True)
         styled_pivot_df = (pivot_df.style
-                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
                         .format(format_nan_abs,subset=pivot_df.columns[num_columns:])
                         .applymap(lambda x: color_nan_background(x)))
@@ -402,7 +410,7 @@ with tab4:
         pivot_df = aggregated_df.pivot(index='Cambio de flujo', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = abs_change(pivot_df)
         styled_pivot_df2 = (pivot_df.style
-                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
                         .format(format_nan_abs,subset=pivot_df.columns[num_columns:])
                         .applymap(lambda x: color_nan_background(x)))
@@ -415,7 +423,7 @@ with tab4:
         pivot_df = aggregated_df.pivot(index='Cambio de flujo', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = abs_change(pivot_df)
         styled_pivot_df3 = (pivot_df.style
-                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
                         .format(format_nan_abs,subset=pivot_df.columns[num_columns:])
                         .applymap(lambda x: color_nan_background(x)))
@@ -428,7 +436,7 @@ with tab4:
         pivot_df = aggregated_df.pivot(index='Action', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = abs_change(pivot_df)
         styled_pivot_df0 = (pivot_df.style
-                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
                         .format(format_nan_abs,subset=pivot_df.columns[num_columns:])
                         .applymap(lambda x: color_nan_background(x)))
@@ -450,7 +458,7 @@ pivot_df = df.pivot(index='extracted_substring', columns='ym', values='Cuentas')
 pivot_df.columns = pivot_df.columns.astype(str)
 pivot_df, columns, num_columns = pct_change(pivot_df)
 styled_pivot_df4 = (pivot_df.style
-                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:])
+                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                    .format( '{:,.0f}', subset=columns)
                    .format(format_nan,subset=pivot_df.columns[num_columns:])
                    .applymap(lambda x: color_nan_background(x)))
