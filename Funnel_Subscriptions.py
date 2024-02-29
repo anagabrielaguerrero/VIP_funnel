@@ -377,8 +377,8 @@ with tab4:
         pivot_df = aggregated_df.pivot(index='Action', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = pct_change(pivot_df)
         num_colors = len(list((pivot_df[pivot_df.columns[num_columns:]]).stack().unique()))
-        cm =sns.diverging_palette(220, 20, as_cmap=True)
-        styled_pivot_df0 = (pivot_df.styles
+        cm =sns.diverging_palette(220, 20, as_cmap=True).reversed()
+        styled_pivot_df0 = (pivot_df.style
                         .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
                         .format(format_nan,subset=pivot_df.columns[num_columns:])
@@ -394,7 +394,7 @@ with tab4:
         pivot_df = aggregated_df.pivot(index='Acciones previas', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = abs_change(pivot_df)
         num_colors = abs(round(pivot_df[pivot_df.columns[num_columns:]].min().min())) + abs(round(pivot_df[pivot_df.columns[num_columns:]].max().max())) + 1 
-        cm =sns.diverging_palette(220, 20, as_cmap=True)
+        cm =sns.diverging_palette(220, 20, as_cmap=True).reversed()
         styled_pivot_df = (pivot_df.style
                         .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
