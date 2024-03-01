@@ -104,14 +104,14 @@ prev['Target'] = 'Click on Button for purchase membership'
 prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
 carousel = prev[prev.apply(lambda row: row.astype(str).str.contains('Clicked carousel image').any(), axis=1)]
 prev2 = prev.drop(index=carousel.index)
-new_row = pd.DataFrame.from_dict({'Clicks':[carousel.Clicks.sum()], 'Source':['Clicked carousel image'],'Target':['Click on Button for purchase membership']})
+new_row = pd.DataFrame.from_dict({'Clicks':[carousel['Clicks'].sum()], 'Source':['Clicked carousel image'],'Target':['Click on Button for purchase membership']})
 prev2 = pd.concat([prev2,new_row], ignore_index=True)
 
 #% en dataframe 
-prev.insert(1,'%',[round(x*100/prev.Clicks.sum(),2) for x in list(prev.Clicks) ])
-post.insert(1,'%',[round(x*100/post.Clicks.sum(),2) for x in list(post.Clicks) ])
-post1.insert(1,'%',[round(x*100/post1.Clicks.sum(),2) for x in list(post1.Clicks) ])
-prev2.insert(1,'%',[round(x*100/prev2.Clicks.sum(),2) for x in list(prev2.Clicks) ])
+prev.insert(1,'%',[round(x*100/prev['Clicks'].sum(),2) for x in list(prev['Clicks']) ])
+post.insert(1,'%',[round(x*100/post['Clicks'].sum(),2) for x in list(post['Clicks']) ])
+post1.insert(1,'%',[round(x*100/post1['Clicks'].sum(),2) for x in list(post1['Clicks']) ])
+prev2.insert(1,'%',[round(x*100/prev2['Clicks'].sum(),2) for x in list(prev2['Clicks']) ])
 
 #4% en otros
 otros_prev2 = prev2[prev2['%']<4]
@@ -121,9 +121,9 @@ otros_change = otros_post1[otros_post1.Source == 'Change Flow']
 
 new_prev2 = prev2.drop(index= otros_prev2.index)
 new_post1 =  post1.drop(index= otros_post1.index)
-new_row_prev2 = pd.DataFrame.from_dict({'Clicks':[otros_prev2.Clicks.sum()], 'Source':['Otras acciones'],'Target':['Click on Button for purchase membership']})
-new_row_post1_1 = pd.DataFrame.from_dict({'Clicks':[otros_int.Clicks.sum()], 'Source':['Interacting With Payment Page'],'Target':['Otras acciones en payment']})
-new_row_post1_2 = pd.DataFrame.from_dict({'Clicks':[otros_change.Clicks.sum()], 'Source':['Change Flow'],'Target':['Otras acciones en flujo']})
+new_row_prev2 = pd.DataFrame.from_dict({'Clicks':[otros_prev2['Clicks'].sum()], 'Source':['Otras acciones'],'Target':['Click on Button for purchase membership']})
+new_row_post1_1 = pd.DataFrame.from_dict({'Clicks':[otros_int['Clicks'].sum()], 'Source':['Interacting With Payment Page'],'Target':['Otras acciones en payment']})
+new_row_post1_2 = pd.DataFrame.from_dict({'Clicks':[otros_change['Clicks'].sum()], 'Source':['Change Flow'],'Target':['Otras acciones en flujo']})
 new_prev2 = pd.concat([new_prev2,new_row_prev2], ignore_index=True)
 new_post1 = pd.concat([new_post1,new_row_post1_1,new_row_post1_2], ignore_index=True)
 
@@ -278,33 +278,34 @@ for i,j in enumerate(hist_sh):
     sh = client.open(j)
     worksheet_list = sh.worksheets()
     prev = load_the_spreadsheet('prev')
+    prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
     prev['Target'] = 'Click on Button for purchase membership' 
     prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
     carousel = prev[prev.apply(lambda row: row.astype(str).str.contains('Clicked carousel image').any(), axis=1)]
     prev2 = prev.drop(index=carousel.index)
-    new_row = pd.DataFrame.from_dict({'Clicks':[carousel.Clicks.sum()], 'Source':['Clicked carousel image'],'Target':['Click on Button for purchase membership']})
+    new_row = pd.DataFrame.from_dict({'Clicks':[carousel['Clicks'].sum()], 'Source':['Clicked carousel image'],'Target':['Click on Button for purchase membership']})
     prev2 = pd.concat([prev2,new_row], ignore_index=True)
-    prev.insert(1,'%',[round(x*100/prev.Clicks.sum(),2) for x in list(prev.Clicks) ])
-    prev2.insert(1,'%',[round(x*100/prev2.Clicks.sum(),2) for x in list(prev2.Clicks) ])
+    prev.insert(1,'%',[round(x*100/prev['Clicks'].sum(),2) for x in list(prev['Clicks']) ])
+    prev2.insert(1,'%',[round(x*100/prev2['Clicks'].sum(),2) for x in list(prev2['Clicks']) ])
     otros_prev2 = prev2[prev2['%']<4]
     new_prev2 = prev2.drop(index= otros_prev2.index)
-    new_row_prev2 = pd.DataFrame.from_dict({'Clicks':[otros_prev2.Clicks.sum()], 'Source':['Otras acciones'],'Target':['Click on Button for purchase membership']})
+    new_row_prev2 = pd.DataFrame.from_dict({'Clicks':[otros_prev2['Clicks'].sum()], 'Source':['Otras acciones'],'Target':['Click on Button for purchase membership']})
     new_prev2 = pd.concat([new_prev2,new_row_prev2], ignore_index=True)
     post1 = load_the_spreadsheet('post1')
     post1.rename(columns= {'SUM(conteo)':'Clicks','category':'Source','subcategory':'Target'}, inplace = True)
     post = pd.DataFrame(post1.groupby('Source')['Clicks'].sum()).reset_index()
     post.rename(columns= {'Source':'Target'}, inplace = True)
-    post['Source'] = 'Click on Button for purchase membership' 
+    post['Source'] = 'Click on Button for purchase mem bership' 
     click = post.groupby('Source')['Clicks'].sum().reset_index()
     post1 = post1[post1.Source != 'No more actions']
-    post.insert(1,'%',[round(x*100/post.Clicks.sum(),2) for x in list(post.Clicks) ])
-    post1.insert(1,'%',[round(x*100/post1.Clicks.sum(),2) for x in list(post1.Clicks) ])
+    post.insert(1,'%',[round(x*100/post['Clicks'].sum(),2) for x in list(post['Clicks']) ])
+    post1.insert(1,'%',[round(x*100/post1['Clicks'].sum(),2) for x in list(post1['Clicks']) ])
     otros_post1 =  post1[post1['%']<4] 
     otros_int = otros_post1[otros_post1.Source == 'Interacting With Payment Page']
     otros_change = otros_post1[otros_post1.Source == 'Change Flow']
     new_post1 =  post1.drop(index= otros_post1.index)
-    new_row_post1_1 = pd.DataFrame.from_dict({'Clicks':[otros_int.Clicks.sum()], 'Source':['Interacting With Payment Page'],'Target':['Otras acciones en payment']})
-    new_row_post1_2 = pd.DataFrame.from_dict({'Clicks':[otros_change.Clicks.sum()], 'Source':['Change Flow'],'Target':['Otras acciones en flujo']})
+    new_row_post1_1 = pd.DataFrame.from_dict({'Clicks':[otros_int['Clicks'].sum()], 'Source':['Interacting With Payment Page'],'Target':['Otras acciones en payment']})
+    new_row_post1_2 = pd.DataFrame.from_dict({'Clicks':[otros_change['Clicks'].sum()], 'Source':['Change Flow'],'Target':['Otras acciones en flujo']})
     new_post1 = pd.concat([new_post1,new_row_post1_1,new_row_post1_2], ignore_index=True)
     dfs_prev.append(new_prev2)
     dfs_post.append(post)
