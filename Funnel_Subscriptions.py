@@ -458,12 +458,10 @@ for i in pivot_df.columns:
     column_sum = pivot_df[i].sum()
     data.append({'Year_Month': i, 'Clicks por campaña': column_sum})
 df_tot= pd.DataFrame(data)
-df_tot.transpose()
+df_tot = df_tot.transpose()
 head = df_tot.iloc[0]
 df_tot = df_tot[1:]
 df_tot.columns = head
-columns = df_tot.columns
-num_columns = len(columns)
 df_tot.columns = df_tot.columns.astype(int)
 df_tot.columns = df_tot.columns.astype(str)
 df_tot, columns, num_columns = pct_change(df_tot)
