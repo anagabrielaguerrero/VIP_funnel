@@ -251,6 +251,7 @@ hist_sh = []
 for file in file_list:
     if file['title'].isdigit():
         hist_sh.append(file['title']) 
+hist_sh = sorted(hist_sh)
 
 def color_nan_background(val):
     if np.isnan(val):
@@ -274,7 +275,7 @@ dfs_prev = []
 dfs_post = []
 dfs_post1 = []
 dfs_click = []
-for i,j in enumerate(hist_sh):
+for i,j in enumerate(hist_sh[:-1]):
     sh = client.open(j)
     worksheet_list = sh.worksheets()
     prev = load_the_spreadsheet('prev')
