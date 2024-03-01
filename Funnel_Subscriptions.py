@@ -465,12 +465,12 @@ df_tot.columns = head
 columns = df_tot.columns
 num_columns = len(columns)
 df_tot.columns = df_tot.columns.astype(int)
-# df_tot.columns = df_tot.columns.astype(str)
+df_tot.columns = df_tot.columns.astype(str)
 df_tot, columns, num_columns = pct_change(df_tot)
 styled_pivot = (df_tot.style
-                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
+                   .background_gradient(cmap=cm,subset=df_tot.columns[num_columns:], axis=None)
                    .format( '{:,.0f}', subset=columns)
-                   .format(format_nan,subset=pivot_df.columns[num_columns:])
+                   .format(format_nan,subset=df_tot.columns[num_columns:])
                    .applymap(lambda x: color_nan_background(x)))
 #%%%%
 with tab5:
