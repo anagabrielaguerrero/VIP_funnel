@@ -315,8 +315,8 @@ for i,j in enumerate(hist_sh[:-1]):
 #%%%-------------------------------------------------------------------------------------------------------------
 with tab4:
     st.header("Comparación histórica: Acciones")
-    st.button("Mostrar diferencia absoluta", type="primary")
-    if st.button('Mostrar diferencia porcentual'):
+    st.button("Mostrar diferencia absoluta", type="primary", key = 'acciones')
+    if st.button('Mostrar diferencia porcentual', key ='acciones1'):
         st.write('Diferencia porcentual ')
         for i, month_df in enumerate(dfs_prev):
             month_df['Month'] = hist_sh[i]
@@ -450,28 +450,54 @@ data = []
 for i in pivot_df.columns:
     column_sum = pivot_df[i].sum()
     data.append({'Year_Month': i, 'Clicks por campaña': column_sum})
-pivot_df, columns, num_columns = pct_change(pivot_df)
-styled_pivot_df4 = (pivot_df.style
-                   .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
-                   .format( '{:,.0f}', subset=columns)
-                   .format(format_nan,subset=pivot_df.columns[num_columns:])
-                   .applymap(lambda x: color_nan_background(x)))
 
-df_tot= pd.DataFrame(data)
-df_tot = df_tot.transpose()
-head = df_tot.iloc[0]
-df_tot = df_tot[1:]
-df_tot.columns = head
-df_tot.columns = df_tot.columns.astype(int)
-df_tot.columns = df_tot.columns.astype(str)
-df_tot, columns, num_columns = pct_change(df_tot)
-styled_pivot = (df_tot.style
-                   .background_gradient(cmap=cm,subset=df_tot.columns[num_columns:], axis=None)
-                   .format( '{:,.0f}', subset=columns)
-                   .format(format_nan,subset=df_tot.columns[num_columns:])
-                   .applymap(lambda x: color_nan_background(x)))
+
 #%%%%
 with tab5:
+    st.button("Mostrar diferencia absoluta", type="primary", key = 'campaigns')
+    if st.button('Mostrar diferencia porcentual', key = 'campaigns1'):
+        st.write('Diferencia porcentual ')    
+        pivot_df, columns, num_columns = pct_change(pivot_df)
+        styled_pivot_df4 = (pivot_df.style
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
+                        .format( '{:,.0f}', subset=columns)
+                        .format(format_nan,subset=pivot_df.columns[num_columns:])
+                        .applymap(lambda x: color_nan_background(x)))
+        df_tot= pd.DataFrame(data)
+        df_tot = df_tot.transpose()
+        head = df_tot.iloc[0]
+        df_tot = df_tot[1:]
+        df_tot.columns = head
+        df_tot.columns = df_tot.columns.astype(int)
+        df_tot.columns = df_tot.columns.astype(str)
+        df_tot, columns, num_columns = pct_change(df_tot)
+        styled_pivot = (df_tot.style
+                        .background_gradient(cmap=cm,subset=df_tot.columns[num_columns:], axis=None)
+                        .format( '{:,.0f}', subset=columns)
+                        .format(format_nan,subset=df_tot.columns[num_columns:])
+                        .applymap(lambda x: color_nan_background(x)))
+    else:
+        st.write('Diferencia absoluta')
+        pivot_df, columns, num_columns = abs_change(pivot_df)
+        styled_pivot_df4 = (pivot_df.style
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
+                        .format( '{:,.0f}', subset=columns)
+                        .format(format_nan_abs,subset=pivot_df.columns[num_columns:])
+                        .applymap(lambda x: color_nan_background(x)))
+        df_tot= pd.DataFrame(data)
+        df_tot = df_tot.transpose()
+        head = df_tot.iloc[0]
+        df_tot = df_tot[1:]
+        df_tot.columns = head
+        df_tot.columns = df_tot.columns.astype(int)
+        df_tot.columns = df_tot.columns.astype(str)
+        df_tot, columns, num_columns = abs_change(df_tot)
+        styled_pivot = (df_tot.style
+                        .background_gradient(cmap=cm,subset=df_tot.columns[num_columns:], axis=None)
+                        .format( '{:,.0f}', subset=columns)
+                        .format(format_nan_abs,subset=df_tot.columns[num_columns:])
+                        .applymap(lambda x: color_nan_background(x)))
+
     st.header("Comparación histórica: Campañas")
     st.markdown("<h3>Clicks por campañas</h3>", unsafe_allow_html=True)   
     st.table(styled_pivot)
