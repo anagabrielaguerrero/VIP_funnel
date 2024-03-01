@@ -57,18 +57,12 @@ with st.expander('Mes'):
     report_month = month_abbr.index(report_month_str) + 1
 st.write(f'{report_year} {report_month_str}')
 if report_month <= 9:
-    # st.text (f'{report_year}'+'0'+f'{report_month}')
     spreadsheet_name  = f'{report_year}'+'0'+f'{report_month}'
-
 else: 
-    # st.text (f'{report_year}{report_month}')
     spreadsheet_name  = f'{report_year}{report_month}'
-
 option = f'{report_year} {report_month_str}'
-
 from google.oauth2 import service_account
 #abrimos el spreadsheet 
-
 credentials = service_account.Credentials.from_service_account_info(service_info, scopes = scope)
 client = Client(scope=scope,creds=credentials)
 spread = Spread(spreadsheet_name,client = client)
@@ -284,7 +278,6 @@ for i,j in enumerate(hist_sh):
     sh = client.open(j)
     worksheet_list = sh.worksheets()
     prev = load_the_spreadsheet('prev')
-    prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
     prev['Target'] = 'Click on Button for purchase membership' 
     prev.rename(columns= {'num_actions':'Clicks','prev_action':'Source'}, inplace = True)
     carousel = prev[prev.apply(lambda row: row.astype(str).str.contains('Clicked carousel image').any(), axis=1)]
@@ -317,10 +310,6 @@ for i,j in enumerate(hist_sh):
     dfs_post.append(post)
     dfs_post1.append(new_post1)
     dfs_click.append(click)
-
-
-#%%--------------------------------------------
-
 #%%%-------------------------------------------------------------------------------------------------------------
 with tab4:
     st.header("Comparación histórica: Acciones")
