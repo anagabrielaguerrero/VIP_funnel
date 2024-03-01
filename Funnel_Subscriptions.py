@@ -465,7 +465,7 @@ df_tot.columns = head
 columns = df_tot.columns
 num_columns = len(columns)
 df_tot.columns = df_tot.columns.astype(int)
-df_tot.columns = df_tot.columns.astype(str)
+# df_tot.columns = df_tot.columns.astype(str)
 df_tot, columns, num_columns = pct_change(df_tot)
 styled_pivot = (df_tot.style
                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
