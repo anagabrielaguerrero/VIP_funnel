@@ -446,17 +446,17 @@ worksheet_list = sh.worksheets()
 df = load_the_spreadsheet('transformed')
 pivot_df = df.pivot(index='extracted_substring', columns='ym', values='Cuentas').fillna(0)
 pivot_df.columns = pivot_df.columns.astype(str)
+data = []
+for i in pivot_df.columns:
+    column_sum = pivot_df[i].sum()
+    data.append({'Year_Month': i, 'Clicks por campaña': column_sum})
 pivot_df, columns, num_columns = pct_change(pivot_df)
 styled_pivot_df4 = (pivot_df.style
                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                    .format( '{:,.0f}', subset=columns)
                    .format(format_nan,subset=pivot_df.columns[num_columns:])
                    .applymap(lambda x: color_nan_background(x)))
-data = []
-for i in pivot_df.columns:
-    # Calculate the sum of each column
-    column_sum = pivot_df[i].sum()
-    data.append({'Year_Month': i, 'Clicks por campaña': column_sum})
+
 df_tot= pd.DataFrame(data)
 df_tot = df_tot.transpose()
 head = df_tot.iloc[0]
