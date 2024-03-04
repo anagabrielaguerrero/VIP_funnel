@@ -296,7 +296,7 @@ for i,j in enumerate(hist_sh[:-1]):
     post1.rename(columns= {'SUM(conteo)':'Clicks','category':'Source','subcategory':'Target'}, inplace = True)
     post = pd.DataFrame(post1.groupby('Source')['Clicks'].sum()).reset_index()
     post.rename(columns= {'Source':'Target'}, inplace = True)
-    post['Source'] = 'Click on Button for purchase mem bership' 
+    post['Source'] = 'Click on Button for purchase membership' 
     click = post.groupby('Source')['Clicks'].sum().reset_index()
     post1 = post1[post1.Source != 'No more actions']
     post.insert(1,'%',[round(x*100/post['Clicks'].sum(),2) for x in list(post['Clicks']) ])
@@ -425,6 +425,7 @@ with tab4:
         aggregated_df.rename(columns= {'Month': ' ', 'Source': 'Action'}, inplace = True)
         pivot_df = aggregated_df.pivot(index='Action', columns=' ', values='Clicks').fillna(0)
         pivot_df, columns, num_columns = abs_change(pivot_df)
+        clicks_pivot = pivot_df 
         styled_pivot_df0 = (pivot_df.style
                         .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
                         .format( '{:,.0f}', subset=columns)
@@ -452,6 +453,9 @@ for i in pivot_df.columns:
     data.append({'Year_Month': i, 'Clicks por campaña': column_sum})
 
 
+def make_bar_style(x):
+    return f"background: linear-gradient(90deg,#5fba7d {x}%, transparent {x}%); width: 10em"    
+
 #%%%%
 with tab5:
     st.button("Mostrar diferencia absoluta", type="primary", key = 'campaigns')
@@ -471,11 +475,24 @@ with tab5:
         df_tot.columns = df_tot.columns.astype(int)
         df_tot.columns = df_tot.columns.astype(str)
         df_tot, columns, num_columns = pct_change(df_tot)
-        styled_pivot = (df_tot.style
-                        .background_gradient(cmap=cm,subset=df_tot.columns[num_columns:], axis=None)
-                        .format( '{:,.0f}', subset=columns)
-                        .format(format_nan,subset=df_tot.columns[num_columns:])
-                        .applymap(lambda x: color_nan_background(x)))
+
+        fila1 = df_tot.iloc[0]
+        fila2 = clicks_pivot.iloc[0]
+        resultado_division = fila1 / fila2
+        resultado_division = pd.DataFrame(resultado_division).T
+        resultado_division.index = ['Porcentaje de campañas en Clicks totales']
+        comp = pd.concat([df_tot, resultado_division])
+        for column in comp.columns[num_columns:]:
+            comp.at['Porcentaje de campañas en Clicks totales', column] = np.nan # Setting the cell to None (NaN) or any other desired value
+        styled_pivot = (comp.style
+                        .background_gradient(cmap=cm,subset=comp.columns[num_columns:], axis=None)
+                        .format( '{:,.0f}', subset = (comp.index[0], columns))
+                        .format(format_nan,subset=(comp.index[0],comp.columns[num_columns:]))
+                        .bar( subset=(comp.index[1], columns) , color='#d65f5f',  vmin=0, vmax=1)
+                        .format(format_nan,subset=(comp.index[1], columns))
+                        .applymap(lambda x: color_nan_background(x))
+                        )
+
     else:
         st.write('Diferencia absoluta')
         pivot_df, columns, num_columns = abs_change(pivot_df)
@@ -492,16 +509,33 @@ with tab5:
         df_tot.columns = df_tot.columns.astype(int)
         df_tot.columns = df_tot.columns.astype(str)
         df_tot, columns, num_columns = abs_change(df_tot)
-        styled_pivot = (df_tot.style
-                        .background_gradient(cmap=cm,subset=df_tot.columns[num_columns:], axis=None)
-                        .format( '{:,.0f}', subset=columns)
-                        .format(format_nan_abs,subset=df_tot.columns[num_columns:])
-                        .applymap(lambda x: color_nan_background(x)))
+        fila1 = df_tot.iloc[0]
+        fila2 = clicks_pivot.iloc[0]
+        resultado_division = fila1 / fila2
+        resultado_division = pd.DataFrame(resultado_division).T
+        resultado_division.index = ['Porcentaje de campañas en Clicks totales']
+        comp = pd.concat([df_tot, resultado_division])
+        for column in comp.columns[num_columns:]:
+            comp.at['Porcentaje de campañas en Clicks totales', column] = np.nan  # Setting the cell to None (NaN) or any other desired value
+
+        styled_pivot = (comp.style
+                        .background_gradient(cmap=cm,subset=comp.columns[num_columns:], axis=None)
+                        .format( '{:,.0f}', subset = (comp.index[0], columns))
+                        .format(format_nan_abs,subset=(comp.index[0],comp.columns[num_columns:]))
+                        .bar( subset=(comp.index[1], columns) , color='#d65f5f',  vmin=0, vmax=1)
+                        .format(format_nan,subset=(comp.index[1], comp.columns))
+                        .applymap(lambda x: color_nan_background(x))
+                        )
+  
 
     st.header("Comparación histórica: Campañas")
     st.markdown("<h3>Clicks por campañas</h3>", unsafe_allow_html=True)   
     st.table(styled_pivot)
     st.markdown("<h3>Campañas</h3>", unsafe_allow_html=True)   
     st.table(styled_pivot_df4)
+
+
+
+
 
 # %%
