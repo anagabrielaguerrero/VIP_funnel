@@ -151,7 +151,7 @@ with col2:
     st.header("Porcentajes")
     col21, col22,col23 = st.columns(3)
     with col21:
-        st.metric(label="Txns VIP", value=str(txns_vip)+'%', delta=str(round(txns_vip-txns_vip_a,2))+"%")
+        st.metric(label="Txns VIP", value=str(txns_vip)+'%', delta=str(round(txns_vip-txns_vip_a,2))+"%",help = 'a')
     with col22: 
         st.metric(label="Activos en app que hicieron click", value=str(suscrip_vip)+'%', delta=str(round(suscrip_vip-suscrip_vip_a,2))+"%")
     with col23: 
