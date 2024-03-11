@@ -151,12 +151,11 @@ with col2:
     st.header("Porcentajes")
     col21, col22,col23 = st.columns(3)
     with col21:
-        st.metric(label="Txns VIP", value=str(txns_vip)+'%', delta=str(round(txns_vip-txns_vip_a,2))+"%",help = 'a')
+        st.metric(label="Txns VIP", value=str(txns_vip)+'%', delta=str(round(txns_vip-txns_vip_a,2))+"%",help = 'Porcentaje de usuarios VIP que hicieron transacciones en el mes actual')
     with col22: 
-        st.metric(label="Activos en app que hicieron click", value=str(suscrip_vip)+'%', delta=str(round(suscrip_vip-suscrip_vip_a,2))+"%")
+        st.metric(label="Activos en app que hicieron click", value=str(suscrip_vip)+'%', delta=str(round(suscrip_vip-suscrip_vip_a,2))+"%", help = 'Porcentaje de usuarios que dieron click al botón para querer la membresía del total de usuarios que navegaron en la aplicación en el mes actual" )
     with col23: 
-        st.metric(label="Suscripciones VIP", value=str(compras_click)+'%', delta=str(round(compras_click-compras_click_a,2))+"%")
-
+        st.metric(label="Suscripciones VIP", value=str(compras_click)+'%', delta=str(round(compras_click-compras_click_a,2))+"%", help = 'Porcentaje de usuarios que se hicieron VIP del total de usuarios que dieron click en querer la membresía") 
 
 #Diagrama ---------------------------------------------------------
 unique_source_target = list(pd.unique(funnel[['Source', 'Target']].values.ravel('K')))
