@@ -130,7 +130,7 @@ worksheet_list = sh.worksheets()
 MAUs = load_the_spreadsheet('MAUs')
 col1, col2 = st.columns(2)
 
-txns_vip = round(MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Txns_VIP']].values[0][0] / MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Activos']].values[0][0] * 100,2)
+txns_vip = round(MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Activos VIP']].values[0][0] / MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Activos']].values[0][0] * 100,2)
 suscrip_vip = round(post.Clicks.sum() / MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Activos_en_app']].values[0][0] * 100,2)
 compras_click = round( MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Compra_memb']].values[0][0] / post.Clicks.sum()* 100,2)
 
@@ -139,13 +139,13 @@ index = MAUs.index[MAUs['Fecha']== int(spreadsheet_name)].tolist()
 
 selected_row = MAUs.iloc[index[0] - 1]
 
-txns_vip_a = round(selected_row['Txns_VIP'] / selected_row['Activos'] * 100,2)
+txns_vip_a = round(selected_row['Activos VIP'] / selected_row['Activos'] * 100,2)
 suscrip_vip_a = round(post.Clicks.sum() / selected_row['Activos_en_app'] * 100,2)
 compras_click_a = round(selected_row['Compra_memb']/post.Clicks.sum() * 100,2)
 
 
 with col1:
-    st.header("Info")
+    st.header("Users")
     st.markdown(MAUs[MAUs['Fecha']== int(spreadsheet_name)].style.hide(axis="index").to_html(), unsafe_allow_html=True)
 with col2:        
     st.header("Porcentajes")
