@@ -236,6 +236,12 @@ def format_nan_abs(val):
     else: 
         return '{:,.0f}'.format(val) 
     
+def format_nan_pct(val):
+    if np.isnan(val):
+        return 'NA'
+    else: 
+        return '{:.2f}%'.format(val) 
+
 def styled_dataframe(DF, group_by, Index, diferencia):
     for i, month_df in enumerate(DF):
         # Para dfs_prev             group_by = 'Source', Index = 'Acciones previas'
@@ -265,7 +271,8 @@ def styled_dataframe(DF, group_by, Index, diferencia):
                         .applymap(lambda x: color_nan_background(x)))
     return styled_pivot_df 
 #%% ------------------------------------------------
-tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs(['Funnel Subscriptions',"Acciones previas", "Cambio de flujo", "Acciones posteriores ", "Comparación histórica: acciones", "Comparación histórica: campañas"])
+tab0, tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
+    ['Funnel Subscriptions',"Acciones previas", "Cambio de flujo", "Acciones posteriores ", "Comparación histórica: acciones", "Comparación histórica: campañas","Comparación histórica: Usuarios"])
 
 with tab0:
     st.header("Funnel Subscriptions")
@@ -494,5 +501,47 @@ with tab5:
     st.markdown("<h3>Campañas</h3>", unsafe_allow_html=True)   
     st.table(styled_pivot_df4)
 
-
 # %%
+with tab6:     
+#Métricas -------------------------------------------------------------
+    folder_id = '1juC34pcnAZu5QeTDB-k5xbyOnNlamxJ3'
+    sh = client.open("MAUs")
+    worksheet_list = sh.worksheets()
+    MAUs = load_the_spreadsheet('MAUs')
+    MAUs.set_index('Fecha', inplace=True)
+    MAUsT = MAUs.T
+    MAUsT.columns = MAUsT.columns.astype(str)
+    st.header("Comparación histórica: Métricas")
+    
+    pct_users = pd.DataFrame()
+    for i,header in enumerate(columns):
+        txns_vip = round(MAUs.loc[MAUs.index == int(header), ['Activos VIP']].values[0][0]/ MAUs.loc[MAUs.index == int(header), ['Activos']].values[0][0] * 100,2)
+        suscrip_vip = round(post.Clicks.sum() / MAUs.loc[MAUs.index== int(header), ['Activos_en_app']].values[0][0] * 100,2)
+        compras_click = round( MAUs.loc[MAUs.index == int(header), ['Compra_memb']].values[0][0] / post.Clicks.sum()* 100,2)
+        pct_users.insert(i, str(header), value = [txns_vip, suscrip_vip,compras_click] )
+    pct_users.insert(0, 'Métrica', value = ['Txns VIP', 'Activos en app que hicieron click', 'Suscripciones VIP'] )
+    pct_users.columns = pct_users.columns.astype(str)
+    pct_users.set_index('Métrica', inplace=True)
+    pivot_df, columns, num_columns = abs_change(pct_users)
+    pivot_df.sort_values(by = list(pivot_df.columns[num_columns:]), inplace=True, ascending= False)
+    cm = sns.diverging_palette(220, 20, as_cmap=True).reversed()
+    styled_pivot_df = (pivot_df.style
+                    .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
+                    .format( '{:,.2f}%', subset=columns)
+                    .format(format_nan_pct,subset=pivot_df.columns[num_columns:])
+                    .applymap(lambda x: color_nan_background(x))) 
+    st.table(styled_pivot_df)
+
+    st.header("Comparación histórica: Usuarios")
+
+    pivot_df, columns, num_columns = pct_change(MAUsT)
+    pivot_df.sort_values(by = list(pivot_df.columns[num_columns:]), inplace=True, ascending= False)
+    cm = sns.diverging_palette(220, 20, as_cmap=True).reversed()
+    styled_pivot_df = (pivot_df.style
+                        .background_gradient(cmap=cm,subset=pivot_df.columns[num_columns:], axis=None)
+                        .format( '{:,.0f}', subset=columns)
+                        .format(format_nan,subset=pivot_df.columns[num_columns:])
+                        .applymap(lambda x: color_nan_background(x))) 
+    st.table(styled_pivot_df)
+                        
+                           
