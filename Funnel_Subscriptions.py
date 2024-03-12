@@ -511,7 +511,7 @@ with tab6:
     MAUs.set_index('Fecha', inplace=True)
     MAUsT = MAUs.T
     MAUsT.columns = MAUsT.columns.astype(str)
-    pivot_df, columns, num_columns = pct_change(MAUsT)
+    columns = MAUsT.columns
 
     st.header("Comparación histórica: Métricas")
     
