@@ -512,6 +512,7 @@ with tab6:
     MAUsT = MAUs.T
     MAUsT.columns = MAUsT.columns.astype(str)
     pivot_df, columns, num_columns = pct_change(MAUsT)
+
     st.header("Comparación histórica: Métricas")
     
     pct_users = pd.DataFrame()
