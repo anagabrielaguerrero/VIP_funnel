@@ -129,7 +129,7 @@ sh = client.open("MAUs")
 worksheet_list = sh.worksheets()
 MAUs = load_the_spreadsheet('MAUs')
 col1, col2 = st.columns(2)
-
+clicks_post = post.Clicks.sum()
 txns_vip = round(MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Activos VIP']].values[0][0] / MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Activos']].values[0][0] * 100,2)
 suscrip_vip = round(post.Clicks.sum() / MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Activos_en_app']].values[0][0] * 100,2)
 compras_click = round( MAUs.loc[MAUs['Fecha']== int(spreadsheet_name), ['Compra_memb']].values[0][0] / post.Clicks.sum()* 100,2)
@@ -141,7 +141,7 @@ selected_row = MAUs.iloc[index[0] - 1]
 
 txns_vip_a = round(selected_row['Activos VIP'] / selected_row['Activos'] * 100,2)
 suscrip_vip_a = round(post.Clicks.sum() / selected_row['Activos_en_app'] * 100,2)
-compras_click_a = round(selected_row['Compra_memb']/post.Clicks.sum() * 100,2)
+compras_click_a = round(selected_row['Compra_memb']/ post.Clicks.sum() * 100,2)
 
 
 with col1:
@@ -167,7 +167,6 @@ links_dict = funnel.to_dict(orient='list')
 fig = go.Figure(data=[go.Sankey(node=dict(pad=15,thickness=20,line=dict(color="black", width=0.3),label= unique_source_target),
                                 link=dict(source = links_dict["Source"], target = links_dict["Target"],value = links_dict["Clicks"], color = links_dict["Colors"]),)],)
 fig.update_layout(title_text=option, font_size=15, autosize=True)
-# fig.update_layout(title_text=option, font_size=15, autosize=False, width=1500, height=1000,align='left')
 
 
 #%% Funciones para dataframes --------------------------------------
@@ -304,9 +303,10 @@ for file in file_list:
     if file['title'].isdigit():
         hist_sh.append(file['title']) 
 hist_sh = sorted(hist_sh)
+print(hist_sh)
 #%%% 
 dfs_prev,dfs_post,dfs_post1,dfs_click  = [],[],[],[]
-for i,j in enumerate(hist_sh[:-1]):
+for i,j in enumerate(hist_sh):
     sh = client.open(j)
     worksheet_list = sh.worksheets()
     prev = load_the_spreadsheet('prev')
